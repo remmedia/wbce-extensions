@@ -20,11 +20,10 @@ if (class_exists('WbceHookBridge')) WbceHookBridge::enableUserFormHooks();
 
 wbce_add_filter('admin.user.form.sections', static function ($html, $userId, $isNew) use ($service) {
     $checked = $isNew || $service->isRequired((int) $userId);
-    $fallback = '<link rel="stylesheet" href="' . htmlspecialchars(WB_URL . '/modules/force_password_change/admin.css?v=2.0.11', ENT_QUOTES, 'UTF-8') . '">'
+    $fallback = '<link rel="stylesheet" href="' . htmlspecialchars(WB_URL . '/modules/force_password_change/admin.css?v=2.0.18', ENT_QUOTES, 'UTF-8') . '">'
         . '<div class="force-password-change-option content-box wbce-admin-card" data-password-option="force-change">'
         . '<input type="hidden" name="force_password_change_present" value="1">'
-        . '<label class="wbce-admin-switch"><input type="checkbox" name="force_password_change" value="1"' . ($checked ? ' checked' : '') . '>'
-        . '<span class="wbce-admin-switch-slider" aria-hidden="true"></span>'
+        . '<label><input class="force-password-change-checkbox" type="checkbox" name="force_password_change" value="1"' . ($checked ? ' checked' : '') . '>'
         . '<span><strong>' . htmlspecialchars(fpc_t('option_title'), ENT_QUOTES, 'UTF-8') . '</strong><br><small>'
         . htmlspecialchars($isNew ? fpc_t('option_new_help') : fpc_t('option_existing_help'), ENT_QUOTES, 'UTF-8')
         . '</small></span></label></div>';
@@ -37,7 +36,7 @@ wbce_add_filter('admin.user.form.sections', static function ($html, $userId, $is
                 'option_title' => fpc_t('option_title'),
                 'option_help' => $isNew ? fpc_t('option_new_help') : fpc_t('option_existing_help'),
                 'wb_url' => WB_URL,
-                'module_version' => '2.0.11',
+                'module_version' => '2.0.18',
             ));
         } catch (Throwable $ignored) {
             // The module-owned HTML path keeps older WBCE installations usable.

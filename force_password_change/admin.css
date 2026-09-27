@@ -1,6 +1,7 @@
 /* Geometry only. Colors, borders, typography and controls come from the active admin theme. */
 .force-password-change-option{box-sizing:border-box;grid-column:1/-1;margin:.65rem 0 0;padding:1rem}
 .force-password-change-option label{display:flex;align-items:flex-start;gap:.75rem;margin:0;cursor:pointer}
+.force-password-change-option .force-password-change-checkbox{appearance:auto;display:block!important;position:static!important;opacity:1!important;visibility:visible!important;box-sizing:border-box;width:1.2rem!important;height:1.2rem!important;min-width:1.2rem;margin:.15rem 0 0!important;padding:0}
 .force-password-change-option span,.force-password-change-option strong,.force-password-change-option small{display:block}
 .force-password-change-option span{flex:1;min-width:0}.force-password-change-option small{margin-top:.2rem;line-height:1.4}
 .force-password-shell{display:grid;width:100%;max-width:760px;margin:1rem auto;gap:1rem}.force-password-shell>.content-box{margin:0}

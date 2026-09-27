@@ -70,7 +70,7 @@ if ($isAjax && $error !== '') {
 
 $admin->print_header();
 ?>
-<link rel="stylesheet" href="<?php echo htmlspecialchars(WB_URL . '/modules/force_password_change/admin.css?v=2.0.11', ENT_QUOTES, 'UTF-8'); ?>">
+<link rel="stylesheet" href="<?php echo htmlspecialchars(WB_URL . '/modules/force_password_change/admin.css?v=2.0.18', ENT_QUOTES, 'UTF-8'); ?>">
 <main class="force-password-shell">
     <header class="force-password-head wbce-admin-header"><h2><?php echo htmlspecialchars(fpc_t('change_title'), ENT_QUOTES, 'UTF-8'); ?></h2><p><?php echo htmlspecialchars(fpc_t('change_subtitle'), ENT_QUOTES, 'UTF-8'); ?></p></header>
     <section class="force-password-card content-box wbce-admin-card">

@@ -2,9 +2,8 @@
 <link rel="stylesheet" href="{{ wb_url }}/modules/force_password_change/admin.css?v={{ module_version }}">
 <div class="force-password-change-option content-box wbce-admin-card" data-password-option="force-change">
     <input type="hidden" name="force_password_change_present" value="1">
-    <label class="wbce-admin-switch">
-        <input type="checkbox" name="force_password_change" value="1"{% if checked %} checked{% endif %}>
-        <span class="wbce-admin-switch-slider" aria-hidden="true"></span>
+    <label>
+        <input class="force-password-change-checkbox" type="checkbox" name="force_password_change" value="1"{% if checked %} checked{% endif %}>
         <span>
             <strong>{{ option_title }}</strong><br>
             <small>{{ option_help }}</small>

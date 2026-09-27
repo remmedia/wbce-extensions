@@ -33,7 +33,7 @@ if ($scenario === 'legacy-language') {
 require $temporary . '/info.php';
 check($module_name === 'Passwortänderung erzwingen', 'Incorrect module name');
 check(strlen($module_description) > 40, 'Missing description');
-check($module_version === '2.0.17', 'Incorrect version');
+check($module_version === '2.0.18', 'Incorrect version');
 require $temporary . '/precheck.php';
 check(isset($PRECHECK['CUSTOM_CHECKS']['Hook-Schnittstellen']), 'Precheck label is not readable');
 if ($scenario === 'legacy-language') {
