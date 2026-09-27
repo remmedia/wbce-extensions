@@ -726,14 +726,20 @@ if (typeof ADMIN_URL === 'undefined') {
                     const answer = (await response.text()).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
                     throw new Error(answer ? 'Die Update-Vorbereitung wurde abgewiesen: ' + answer.slice(0, 240) : 'Die Update-Vorbereitung wurde abgewiesen. Bitte die Seite neu laden und erneut versuchen.');
                 }
-                const reader = response.body.getReader(), decoder = new TextDecoder(); let buffer = '', prepared = null;
+                const reader = response.body.getReader(), decoder = new TextDecoder(); let buffer = '', prepared = null, protocolNoise = [];
                 while (true) {
                     const chunk = await reader.read(); if (chunk.done) break;
                     buffer += decoder.decode(chunk.value, {stream:true}); const lines = buffer.split('\n'); buffer = lines.pop();
                     for (const line of lines) {
-                        if (!line.trim()) continue;
+                        const payload = line.trim().replace(/^\uFEFF/, '');
+                        if (!payload) continue;
                         let event;
-                        try { event = JSON.parse(line); } catch (parseError) { throw new Error('Die Update-Vorbereitung lieferte eine ungültige Serverantwort. Bitte die Seite neu laden und erneut versuchen.'); }
+                        try { event = JSON.parse(payload); } catch (parseError) {
+                            // PHP notices or a proxy banner before the NDJSON stream must not
+                            // discard a valid prepared update that follows.
+                            protocolNoise.push(payload.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim());
+                            continue;
+                        }
                         if (event.message) { if (overlaySubtext) overlaySubtext.textContent = event.message; const item=document.createElement('li');item.textContent=event.message;prepareLogItems.appendChild(item); }
                         if (Array.isArray(event.items)) event.items.forEach(function(label) { const item=document.createElement('li'); item.textContent=label; item.className='is-ready'; prepareLogItems.appendChild(item); });
                         if (Number.isFinite(Number(event.percent))) { progressBar.style.width=Number(event.percent)+'%';progressText.textContent=Number(event.percent)+' %'; }
@@ -742,7 +748,10 @@ if (typeof ADMIN_URL === 'undefined') {
                     }
                 }
                 if (buffer.trim()) { let event; try { event = JSON.parse(buffer); } catch (parseError) { throw new Error('Die Update-Vorbereitung lieferte eine unvollständige Serverantwort. Bitte erneut versuchen.'); } if (event.state === 'error') throw new Error(event.message || 'Das Store-Update konnte nicht vorbereitet werden.'); if (event.ok) { prepared = event; if (event.maintenance_enabled === true) updaterMaintenanceIndicator(true); } }
-                if (!prepared || !prepared.update_token) throw new Error('Das Store-Update wurde nicht bestätigt.');
+                if (!prepared || !prepared.update_token) {
+                    const detail = protocolNoise.filter(Boolean).join(' ').slice(0, 300);
+                    throw new Error(detail ? 'Die Update-Vorbereitung wurde nicht bestätigt: ' + detail : 'Das Store-Update wurde nicht bestätigt.');
+                }
                 startUpdateExecution(prepared);
             } catch (error) {
                 hideLoadingSpinner();
