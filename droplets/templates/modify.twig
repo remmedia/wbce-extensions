@@ -1,0 +1,92 @@
+
+<div class="cpForm droplets-admin-frame droplets-editor-frame">
+<form name="modify" action="{{ MODULE_DIR }}/save_droplet.php" method="post" style="margin: 0;" data-wbce-async-form data-success-message="{{ L_('MESSAGE:RECORD_MODIFIED_SAVED') }}" data-error-message="{{ L_('TEXT:ERROR') }}">
+<input type="hidden" name="{{ FTAN_NAME }}" value="{{ FTAN_VALUE }}" data-wbce-ftan="{{ FTAN_VALUE }}">
+<input type="hidden" name="data_codepress" value="" />
+<input type="hidden" name="droplet_id" value="{{ data.id }}" />
+<input type="hidden" name="show_wysiwyg" value="" />
+
+<div style="margin: 6px 28px 17px;float:right;">        
+    <input value="1" name="active" type="checkbox" id="activator" switch="bool" {% if data.active == 1 %}checked{% endif %}  />
+    <label for="activator" class="labeled" data-on-label="{{ L_('TEXT:ENABLED') }}" data-off-label="{{ L_('TEXT:DISABLED') }}">
+    </label>
+</div>
+        
+<h2>
+    {% if data.name %}{{ L_('DR_TEXT:MODIFY_DROPLET') }}: <span>{{ data.name }}</span> 
+    {% else %}<i class="fa fa-plus"></i> {{ L_('DR_TEXT:ADD_DROPLET') }}
+    {% endif %}
+</h2>
+
+    <div class="formRow">
+        <div class="settingName"><label for="title">{{ L_('TEXT:NAME') }}</label></div>
+        <div class="settingValue"><input type="text" id="title" name="title" value="{{ data.name }}" maxlength="32" required />            
+        </div>
+    </div>
+        
+    <div class="formRow">
+        <div class="settingName"><label for="description">{{ L_('TEXT:DESCRIPTION') }}</label></div>
+        <div class="settingValue"><input type="text" id="description" name="description" value="{{ data.description }}" />            
+        </div>
+    </div>
+
+    {% if data.modified_by == 1 %}
+    <div class="formRow">
+        <div class="settingName"><label>{{ L_('TEXT:ADMIN') }}</label></div>
+        <div class="settingValue"> 
+            <label>
+                <input type="checkbox" name="admin_edit" value="1" {% if data.admin_edit == 1 %}checked{% endif %} />
+                {{ L_('DR_TEXT:ADMIN_EDIT') }}
+            </label> 
+            <label>
+                <input type="checkbox" name="admin_view" value="1" {% if data.admin_view == 1 %}checked{% endif %} />
+                {{ L_('DR_TEXT:ADMIN_VIEW') }}
+            </label> 
+        </div>
+    </div>
+    {% endif %}
+    <div class="formRow fullValue">
+        {% if check_droplet_syntax(data.id) == false %}
+            <div class="alert alert-danger">{{ L_('DR_TEXT:INVALIDCODE') }}!</div>
+        {% endif %}
+        <div class="settingName">
+            {% if check_droplet_syntax(data.id) == true %}
+                <i class="fa fa-tint"></i>
+            {% else %}
+                <i class="fa fa-tint blinking text-danger" title="{{ L_('DR_TEXT:INVALIDCODE') }}!"></i>
+            {% endif %}
+            <label for="contentedit">{{ L_('TEXT:CODE') }}</label></div>
+        <div class="settingValue">                
+            <textarea name="savecontent" id ="contentedit" data-editor="php" style="height: 450px;" rows="50" cols="120">{{ data.code }}</textarea>&nbsp;
+        </div>
+    </div>    
+    <div class="formRow">
+        <div class="settingName"><label for="">{{ L_('TEXT:COMMENTS') }}</label></div>
+        <div class="settingValue">            			
+            <textarea name="comments" style="height: 100px;" rows="6" cols="120">{{ data.comments }}</textarea>
+        </div>
+    </div>
+        
+    <div class="formRow">
+        <div class="pos-right">
+            <p><em>{{ L_('MESSAGE:PAGES_LAST_MODIFIED') }} {{ get_user_name(data.modified_by) }}, {{ data.modified_when|date(constant('DATE_FORMAT')~ ' ' ~constant('TIME_FORMAT')) }}</em></p>
+        </div>
+    </div>
+    <div class="buttonsRow">
+        <button class="button ico-cancel" type="button" data-redirect-location="{{ TOOL_URI }}&hilite={{ data.name }}">{{ L_('TEXT:CANCEL') }}</button>
+        {% if data.modified_by == 1 or data.admin_edit == 0 %}
+            <button  class="button ico-save pos-right" name="save" type="submit">{{ L_('TEXT:SAVE') }}</button>
+            <button  class="button ico-save-back pos-right" name="save_back" type="submit" data-hide-on-ajax-save>{{ L_('TEXT:SAVE') }} & {{ L_('TEXT:BACK') }}</button>
+        {% endif %}
+    </div>
+</form>
+</div>
+    {{ CodeEditor('contentedit', 'x-php', {
+        'height':     550,
+        'toolbar':    true,
+        'line_wrap':  true,
+        'ajax_save':  true,
+        'ajax_url':   ajax_url,
+        'ajax_data':  {'idKey': idKey},
+        'error_line': error_line|default(0)
+    }) }}

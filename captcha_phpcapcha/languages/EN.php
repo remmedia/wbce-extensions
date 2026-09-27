@@ -1,0 +1,3 @@
+<?php
+$CAPTCHA_PRECHECK_LABEL='Hook interfaces';
+$CAPTCHA_PROVIDER=array('name'=>'phpcapcha','description'=>'Classic security image generated entirely locally using PHP GD.','configure'=>'Configure phpcapcha','length'=>'Number of characters','timeout'=>'Validity period in seconds','gd_required'=>'PHP GD is required for this CAPTCHA.','image_alt'=>'Security code image','input_label'=>'Enter security code','secure_random_required'=>'This CAPTCHA requires a secure random source.','registration_failed'=>'The phpcapcha add-on registration failed.','hooks_required'=>'WBCE 1.7 hook API or WBCE Hook Bridge 1.2.0','available'=>'Available','unavailable'=>'Unavailable');

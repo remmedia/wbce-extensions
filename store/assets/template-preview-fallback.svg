@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" role="img" aria-labelledby="title description">
+  <title id="title">Keine Vorschau verfügbar</title>
+  <desc id="description">Neutrale schematische Vorschau eines Templates</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#eef5fa"/><stop offset="1" stop-color="#dcecf7"/></linearGradient>
+    <filter id="shadow"><feDropShadow dx="0" dy="12" stdDeviation="18" flood-opacity=".14"/></filter>
+  </defs>
+  <rect width="1200" height="750" fill="url(#bg)"/>
+  <rect x="140" y="95" width="920" height="560" rx="22" fill="#fff" filter="url(#shadow)"/>
+  <rect x="140" y="95" width="920" height="72" rx="22" fill="#2271b1"/>
+  <rect x="140" y="145" width="920" height="22" fill="#2271b1"/>
+  <circle cx="188" cy="131" r="9" fill="#fff" opacity=".85"/><circle cx="218" cy="131" r="9" fill="#fff" opacity=".62"/><circle cx="248" cy="131" r="9" fill="#fff" opacity=".4"/>
+  <rect x="190" y="215" width="530" height="42" rx="9" fill="#dce7ef"/>
+  <rect x="190" y="281" width="760" height="18" rx="9" fill="#edf1f4"/>
+  <rect x="190" y="316" width="610" height="18" rx="9" fill="#edf1f4"/>
+  <rect x="190" y="378" width="300" height="190" rx="14" fill="#eef5fa"/>
+  <rect x="515" y="378" width="435" height="190" rx="14" fill="#f5f7f8"/>
+  <path d="M275 490l55-58 45 43 42-29 48 61v30H218v-21z" fill="#8ebbd8"/>
+  <circle cx="399" cy="423" r="22" fill="#f5c86b"/>
+  <text x="732" y="457" text-anchor="middle" font-family="Arial,sans-serif" font-size="28" font-weight="700" fill="#3c5261">Keine Vorschau</text>
+  <text x="732" y="499" text-anchor="middle" font-family="Arial,sans-serif" font-size="20" fill="#657985">für dieses Template verfügbar</text>
+</svg>

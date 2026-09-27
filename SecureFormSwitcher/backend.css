@@ -1,0 +1,31 @@
+.sfs { font: inherit; color: var(--wbce-admin-text, CanvasText); }
+.sfs-intro { margin: 0 0 1rem; padding: .85rem 1rem; border-left: 4px solid var(--wbce-admin-primary, currentColor); border-radius: var(--wbce-admin-radius, 4px); background: var(--wbce-admin-surface-muted, var(--wbce-admin-surface, Canvas)); }
+.sfs form { box-sizing: border-box; width: min(100%, 920px); padding: 1.1rem 1.25rem; border: 1px solid var(--wbce-admin-border, #c8d0d8); border-radius: var(--wbce-admin-radius, 10px); background: var(--wbce-admin-surface, #fff); box-shadow: var(--wbce-admin-shadow, 0 2px 8px rgba(30,45,60,.08)); }
+.sfs-row { display: grid; grid-template-columns: minmax(230px, 34%) minmax(0, 1fr); gap: 1.4rem; align-items: center; min-height: 58px; padding: .9rem 0; border-bottom: 1px solid var(--wbce-admin-border, #e1e6ea); }
+.sfs-row:last-of-type { border-bottom: 0; }
+.sfs-copy { min-width: 0; }
+.sfs-row label { font-weight: 650; }
+.sfs-hint { margin-top: .3rem; color: var(--wbce-admin-muted, GrayText); line-height: 1.45; }
+.sfs-hint em { display: none; }
+.sfs-hint ul { margin: .45rem 0 0 1.2rem; }
+.sfs-control { display: flex; align-items: center; gap: .6rem; min-width: 0; }
+.sfs-control input[type=text], .sfs-control input[type=password], .sfs-control input[type=number], .sfs-control select { appearance: auto; width: 100%; max-width: 420px; min-height: 42px; box-sizing: border-box; padding: .55rem .7rem; border: 1px solid var(--wbce-admin-border, #9aa6b2); border-radius: var(--wbce-admin-input-radius, 6px); background: var(--wbce-admin-input-background, #fff); color: var(--wbce-admin-text, #263238); font: inherit; line-height: 1.25; }
+.sfs-control input[type=number], .sfs-control select { max-width: 180px; }
+.sfs-control input:focus, .sfs-control select:focus { outline: 0; border-color: var(--wbce-admin-primary, #2271b1); box-shadow: 0 0 0 2px color-mix(in srgb, var(--wbce-admin-primary, #2271b1) 22%, transparent); }
+.sfs-reveal { min-height: 42px; padding: .5rem .8rem; border: 1px solid var(--wbce-admin-border, #9aa6b2); border-radius: var(--wbce-admin-input-radius, 6px); background: var(--wbce-admin-surface, #fff); color: var(--wbce-admin-text, #263238); font: inherit; font-weight: 600; white-space: nowrap; cursor: pointer; }
+.sfs-reveal:hover { border-color: var(--wbce-admin-primary, #2271b1); color: var(--wbce-admin-primary, #2271b1); }
+.sfs-actions { display: flex; justify-content: flex-end; gap: .6rem; padding-top: 1rem; }
+.sfs-switch-input { position: absolute; opacity: 0; pointer-events: none; }
+.sfs-switch { position: relative; display: block; width: 46px; height: 24px; border-radius: 24px; background: var(--wbce-admin-muted, GrayText); cursor: pointer; transition: .18s; }
+.sfs-switch span { position: absolute; left: 3px; top: 3px; width: 18px; height: 18px; border-radius: 50%; background: var(--wbce-admin-surface, Canvas); box-shadow: var(--wbce-admin-shadow, 0 1px 3px rgba(0,0,0,.28)); transition: .18s; }
+.sfs-switch-input:checked + .sfs-switch { background: var(--wbce-admin-primary, Highlight); }
+.sfs-switch-input:checked + .sfs-switch span { transform: translateX(22px); }
+.sfs-switch-input:focus-visible + .sfs-switch { outline: 2px solid var(--wbce-admin-primary, Highlight); outline-offset: 2px; }
+.sfs.is-saving form { pointer-events: none; opacity: .7; cursor: progress; }
+.sfs-dialog { width: min(480px, calc(100vw - 2rem)); padding: 1.25rem; border: 1px solid var(--wbce-admin-border, currentColor); border-radius: var(--wbce-admin-radius, 4px); background: var(--wbce-admin-surface, Canvas); color: var(--wbce-admin-text, CanvasText); box-shadow: var(--wbce-admin-shadow, 0 18px 55px rgba(0,0,0,.32)); }
+.sfs-dialog::backdrop { background: rgba(15,23,42,.58); }
+.sfs-dialog > div { display: flex; justify-content: flex-end; gap: .6rem; margin-top: 1rem; }
+.sfs-toast { position: fixed; z-index: 100000; right: 1.25rem; bottom: 1.25rem; max-width: min(420px, calc(100vw - 2.5rem)); padding: .8rem 1rem; border-left: 4px solid var(--wbce-admin-success, #15803d); border-radius: var(--wbce-admin-radius, 4px); background: var(--wbce-admin-surface, Canvas); color: var(--wbce-admin-text, CanvasText); box-shadow: var(--wbce-admin-shadow, 0 8px 28px rgba(0,0,0,.22)); opacity: 0; transform: translateY(12px); transition: .2s; }
+.sfs-toast.is-visible { opacity: 1; transform: none; }
+.sfs-toast.is-error { border-left-color: var(--wbce-admin-danger, #b91c1c); }
+@media (max-width: 720px) { .sfs form { padding: .85rem; } .sfs-row { grid-template-columns: 1fr; gap: .55rem; align-items: start; } .sfs-control input[type=text], .sfs-control input[type=password] { max-width: none; } }

@@ -1,0 +1,52 @@
+<?php
+/**
+ * WBCE CMS
+ * Way Better Content Editing.
+ * Visit https://wbce.org to learn more and to join the community.
+ *
+ * @copyright Ryan Djurovich (2004-2009)
+ * @copyright WebsiteBaker Org. e.V. (2009-2015)
+ * @copyright WBCE Project (2015-)
+ * @license GNU GPL2 (or any later version)
+ */
+
+$SPH_TEXT = array();
+require __DIR__.'/languages/EN.php';
+$sphLanguage = defined('LANGUAGE') ? __DIR__.'/languages/'.strtoupper((string) LANGUAGE).'.php' : '';
+if ($sphLanguage !== '' && is_file($sphLanguage)) { require $sphLanguage; }
+$module_directory = 'simplepagehead';
+$module_uuid = '2e274891-9fc2-418a-80cb-c9692502c9f2';
+$module_name = $SPH_TEXT['MODULE_NAME'];
+$module_function = 'snippet';
+$module_version = '0.8.5';
+$module_platform = '1.6.8';
+$module_requires_php = '8.2.0';
+$module_author = 'Chio, with a litte help from thorn. Extended for use with other modules by Christoph Marti. Updated by Florian Meerwinck for WBCE';
+$module_license = 'GNU General Public License';
+$module_description = $SPH_TEXT['MODULE_DESCRIPTION'];
+$module_level = 'core';
+
+/**
+ * Version history
+ * 0.8.3 - better parameter handling 
+ *
+ * 0.8.2 - more SEO friendly title (hopefully), remove default generator tag
+ *
+ * 0.8.1 - PHP 8.1 fix (if $section not set)
+ *
+ * 0.8.0 - cs fixed files
+ *       - fixed Versioning
+ *       - updated Readme
+ *
+ * 0.7.4 - disable outdated notoolbar metatag
+ *
+ * 0.7.3 - add missing endtags
+ *
+ * 0.7.2 - Add module_level core status
+ *       - Update module_platform
+ *
+ * 0.7.1 - Updated Touchicon integration
+ *
+ * 0.7.0 - Making use of Insert class
+ *
+ **/

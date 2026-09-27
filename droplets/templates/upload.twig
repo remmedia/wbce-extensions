@@ -1,0 +1,17 @@
+<h2>{{ L_('DR_TEXT:UPLOAD') }}</h2>
+<div class="cpForm">
+    <form method="post" action="{{ TOOL_URI }}&amp;upload=1" enctype="multipart/form-data" name="upload" id="droplets-chunk-form" data-endpoint="{{ chunk_url }}" data-token="{{ chunk_token }}" data-return-url="{{ TOOL_URI }}">
+        {{ FTAN }}
+        <div class="text-center" style="padding:1rem;">
+            <input type="file" name="userfile" accept=".zip,application/zip" required />
+        </div>
+        <div class="droplets-upload-progress" role="status" aria-live="polite" hidden>
+            <progress value="0" max="100"></progress><span>0%</span>
+        </div>
+        <div class="droplets-upload-result" role="alert" aria-live="assertive"></div>
+        <div class="buttonsRow">
+            <button class="button ico-back" type="button" data-redirect-location="{{ TOOL_URI }}">{{ L_('TEXT:BACK') }}</button>
+            <button type="submit" name="submit" class="button ico-upload pos-right">{{ L_('DR_TEXT:UPLOAD') }}</button>
+        </div>
+    </form>
+</div>

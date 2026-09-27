@@ -1,0 +1,2 @@
+<?php
+$captchaMetadataLanguage=defined('LANGUAGE')?strtoupper(substr((string)LANGUAGE,0,2)):'EN'; $captchaMetadataFile=__DIR__.'/languages/'.preg_replace('/[^A-Z]/','',$captchaMetadataLanguage).'.php'; if(!is_file($captchaMetadataFile))$captchaMetadataFile=__DIR__.'/languages/EN.php'; $CAPTCHA_PROVIDER=[]; require $captchaMetadataFile; $module_name=(string)($CAPTCHA_PROVIDER['name']??'CaptchaFox'); $module_description=(string)($CAPTCHA_PROVIDER['description']??'');

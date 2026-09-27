@@ -1,0 +1,430 @@
+{#
+    captcha_control/twig/tool.twig
+
+    Variables:
+      FTAN_NAME, FTAN_VALUE — FTAN field data
+      RETURN_URL        — form action URL
+      RETURN_TO_TOOLS   — back-button URL (tools list)
+      IS_HTTPS          — bool; ALTCHA needs a secure context (crypto.subtle) —
+                           below this the widget-customization section is
+                           replaced by a warning box and Captcha.php falls
+                           back to a math captcha automatically.
+      PROVIDERS         — installed module providers plus built-in ALTCHA
+      CAPTCHA_TYPE      — currently active type key
+      ENABLED_CAPTCHA   — '1' or '0'
+      ENABLED_ASP       — '1' or '0'
+      ALTCHA            — { auto, delay, hidefooter, hidelogo,
+                            color_brand, color_success,
+                            color_base, color_checkbox,
+                            color_text, border_radius }
+      WBECOLORIS_CSS       — URL to wbeColoris.css
+      WBECOLORIS_ADMIN_CSS — URL to wbeColoris.admin.css
+      WBECOLORIS_JS        — URL to wbeColoris.js
+      Language strings are accessed directly via L_('CAPTCHA:KEY') in the template.
+#}
+
+{% autoescape 'html' %}
+<header class="captcha-control-hero wbce-admin-hero">
+    <i class="fa fa-shield" aria-hidden="true"></i>
+    <div><h2>{{ L_('CAPTCHA:HEADING') }}</h2><p>{{ L_('CAPTCHA:HOWTO') }}</p></div>
+    <a href="{{ RETURN_TO_TOOLS }}"><i class="fa fa-th-large" aria-hidden="true"></i> {{ L_('CAPTCHA:ADMIN_TOOLS') }}</a>
+</header>
+<form name="store_settings" action="{{ RETURN_URL }}" method="post" data-captcha-settings-form>
+    <input type="hidden" name="{{ FTAN_NAME }}" value="{{ FTAN_VALUE }}" data-captcha-ftan="{{ FTAN_VALUE }}">
+    <div class="cp-settings">
+        <div class="cp-toggle-section cp-card-body">
+            <div class="cp-card-head">
+                <label><i class="fa fa-sliders"></i> {{ L_('CAPTCHA:CONFIGURE_PROTECTION') }}</label>
+            </div>
+
+            <blockquote class="captcha-provider-intro">
+                <p><b data-provider-intro-title>{{ PROVIDERS[CAPTCHA_TYPE].name|default(L_('CAPTCHA:HEADING')) }}</b></p>
+                <p data-provider-intro-description>{{ PROVIDERS[CAPTCHA_TYPE].description|default(L_('CAPTCHA:PROVIDER_DEFAULT_INFO')) }}</p>
+            </blockquote>
+                {# ── CAPTCHA Type ──────────────────────────────────────────── #}
+                {% if PROVIDERS|length > 1 %}<div class="captcha-provider-grid">
+                    {% for key, provider in PROVIDERS %}
+                    <label class="captcha-provider{{ key == CAPTCHA_TYPE ? ' is-selected' : '' }}" data-provider-name="{{ provider.name }}" data-provider-description="{{ provider.description ?: L_('CAPTCHA:INSTALLED_PROVIDER') }}">
+                        <input type="radio" name="captcha_type" value="{{ key }}" {{ key == CAPTCHA_TYPE ? 'checked' : '' }}>
+                        <span class="captcha-provider-title"><strong>{{ provider.name }}</strong><span class="captcha-provider-state">{{ key == CAPTCHA_TYPE ? L_('CAPTCHA:ACTIVE') : '' }}</span></span>
+                        <small>{{ provider.description ?: L_('CAPTCHA:INSTALLED_PROVIDER') }}</small>
+                        <span class="captcha-provider-check" aria-hidden="true"></span>
+                    </label>
+                    {% endfor %}
+                </div>{% elseif PROVIDERS|length == 1 %}{% for key, provider in PROVIDERS %}<input type="hidden" name="captcha_type" value="{{ key }}"><div class="captcha-single-provider"><strong>{{ L_('CAPTCHA:ACTIVE_PROVIDER') }} {{ provider.name }}</strong><small>{{ provider.description ?: L_('CAPTCHA:INSTALLED_PROVIDER') }}</small></div>{% endfor %}{% else %}<blockquote class="error-box"><strong>{{ L_('CAPTCHA:NO_PROVIDER_TITLE') }}</strong> {{ L_('CAPTCHA:NO_PROVIDER_INFO') }}</blockquote>{% endif %}
+
+                {# ── Enable Captcha ────────────────────────────────────────── #}
+                <div class="cp-setting-row">
+                    <div class="cp-setting-name">{{ L_('CAPTCHA:USE_SIGNUP_CAPTCHA') }}</div>
+                    <div class="cp-setting-value">
+                        <input type="hidden" name="enabled_captcha" value="0">
+                        <label class="captcha-switch"><input type="checkbox" name="enabled_captcha" value="1" {{ ENABLED_CAPTCHA == '1' ? 'checked' : '' }}><span class="captcha-slider"></span><span class="captcha-switch-state" data-switch-state>{{ ENABLED_CAPTCHA == '1' ? TEXT_ENABLED : TEXT_DISABLED }}</span></label>
+                    </div>
+                </div>
+
+                <div class="cp-setting-row captcha-login-setting-row">
+                    <div class="cp-setting-name">{{ L_('CAPTCHA:LOGIN_CAPTCHA') }}</div>
+                    <div class="cp-setting-value">
+                        <input type="hidden" name="captcha_login_mode" value="off">
+                        <label class="captcha-switch"><input type="checkbox" data-login-captcha-toggle {{ CAPTCHA_LOGIN_MODE != 'off' ? 'checked' : '' }}><span class="captcha-slider"></span><span class="captcha-switch-state" data-switch-state>{{ CAPTCHA_LOGIN_MODE != 'off' ? TEXT_ENABLED : TEXT_DISABLED }}</span></label>
+                        <div class="captcha-login-mode-options" data-login-captcha-options {{ CAPTCHA_LOGIN_MODE == 'off' ? 'hidden' : '' }}>
+                            <select id="captcha-login-mode-select" name="captcha_login_mode" {{ CAPTCHA_LOGIN_MODE == 'off' ? 'disabled' : '' }}>
+                                <option value="after_failures" {{ CAPTCHA_LOGIN_MODE == 'after_failures' ? 'selected' : '' }}>{{ L_('CAPTCHA:LOGIN_AFTER_FAILURES') }}</option>
+                                <option value="always" {{ CAPTCHA_LOGIN_MODE == 'always' ? 'selected' : '' }}>{{ L_('CAPTCHA:LOGIN_ALWAYS') }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cp-setting-row">
+                    <div class="cp-setting-name">{{ L_('CAPTCHA:PASSWORD_RESET_CAPTCHA') }}</div>
+                    <div class="cp-setting-value"><label class="captcha-switch"><input type="checkbox" name="captcha_password_reset" value="1" {{ CAPTCHA_PASSWORD_RESET ? 'checked' : '' }}><span class="captcha-slider"></span><span class="captcha-switch-state" data-switch-state>{{ CAPTCHA_PASSWORD_RESET ? TEXT_ENABLED : TEXT_DISABLED }}</span></label></div>
+                </div>
+
+                {# ── Advanced Spam Protection (Honeypot) ───────────────────── #}
+                <div class="cp-setting-row">
+                    <div class="cp-setting-name">{{ L_('CAPTCHA:ASP_LABEL') }}</div>
+                    <div class="cp-setting-value">
+                        <input type="hidden" name="enabled_asp" value="0">
+                        <label class="captcha-switch"><input type="checkbox" name="enabled_asp" value="1" {{ ENABLED_ASP == '1' ? 'checked' : '' }}><span class="captcha-slider"></span><span class="captcha-switch-state" data-switch-state>{{ ENABLED_ASP == '1' ? TEXT_ENABLED : TEXT_DISABLED }}</span></label>
+                        <div class="cp-setting-hint">{{ L_('CAPTCHA:ASP_DESCRIPTION') }}</div>
+                    </div>
+                </div>
+                {% for providerId, settingsHtml in PROVIDER_SETTINGS %}
+                <section class="captcha-provider-settings" data-provider="{{ providerId }}" {{ providerId != CAPTCHA_TYPE ? 'hidden' : '' }}>
+                    {{ settingsHtml|raw }}
+                </section>
+                {% endfor %}
+
+                {% if PROVIDERS.altcha.fallback|default(false) %}<section class="captcha-provider-settings captcha-provider-settings-altcha" data-provider="altcha" {{ CAPTCHA_TYPE != 'altcha' ? 'hidden' : '' }}>
+                {% if not IS_HTTPS %}
+                {# ══ No HTTPS — ALTCHA cannot run in the browser at all ════════ #}
+                <div class="cp-card-head" id="config">
+                    <label><i class="fa fa-wrench"></i> {{ L_('CAPTCHA:WIDGET_HEADING') }}</label>
+                </div>
+                <blockquote class="error-box captcha-https-warning">
+                    <p><b><i class="fa fa-exclamation-triangle"></i> {{ L_('CAPTCHA:NO_HTTPS_HEADING') }}</b></p>
+                    <p>{{ L_('CAPTCHA:NO_HTTPS_INFO') }}</p>
+                    <p>{{ L_('CAPTCHA:NO_HTTPS_FALLBACK') }}</p>
+                </blockquote>
+                {% else %}
+                {# ══ ALTCHA Widget-Anpassung ════════════════════════════════ #}
+                <div class="cp-card-head" id="config">
+                    <label><i class="fa fa-wrench"></i> {{ L_('CAPTCHA:WIDGET_HEADING') }}</label>
+                </div>
+                {# ── Two-column body ──────────────────────────────────────── #}
+                <section class="has-aside">
+                <div class="cp-card-main">
+
+                    {# ── Start-Modus ────────────────────────────────────────── #}
+                    <div class="cp-setting-row">
+                        <div class="cp-setting-name">{{ L_('CAPTCHA:AUTO_LABEL') }}</div>
+                        <div class="cp-setting-value">
+                            <div class="altcha-h-radios">
+                                <label><input type="radio" name="altcha_auto" value="off"
+                                    {{ ALTCHA.auto == 'off'      ? 'checked' : '' }}
+                                    onchange="altchaUpdatePreview()"> {{ L_('CAPTCHA:AUTO_OFF') }}</label>
+                                <label><input type="radio" name="altcha_auto" value="onload"
+                                    {{ ALTCHA.auto == 'onload'   ? 'checked' : '' }}
+                                    onchange="altchaUpdatePreview()"> {{ L_('CAPTCHA:AUTO_ONLOAD') }}</label>
+                                <label><input type="radio" name="altcha_auto" value="onsubmit"
+                                    {{ ALTCHA.auto == 'onsubmit' ? 'checked' : '' }}
+                                    onchange="altchaUpdatePreview()"> {{ L_('CAPTCHA:AUTO_ONSUBMIT') }}</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# ── Akzentfarbe ────────────────────────────────────────── #}
+                    <div class="cp-setting-row">
+                        <div class="cp-setting-name">
+                            {{ L_('CAPTCHA:COLOR_BRAND') }}<br>
+                            <small class="cp-normal-weight">{{ L_('CAPTCHA:COLOR_BRAND_HINT')|raw }}</small>
+                        </div>
+                        <div class="cp-setting-value">
+                            <span class="altcha-color-control"><input type="color" class="altcha-native-color" value="{{ ALTCHA.color_brand ? ALTCHA.color_brand : '#6d28d9' }}" data-color-target="altcha_color_brand" aria-label="{{ L_('CAPTCHA:COLOR_BRAND') }}"><input type="text" id="altcha_color_brand" name="altcha_color_brand"
+                                   class="altcha-coloris" data-wbecoloris
+                                   value="{{ ALTCHA.color_brand }}"
+                                   placeholder="#6d28d9" pattern="#[0-9A-Fa-f]{6}"></span>
+                        </div>
+                    </div>
+
+                    {# ── Check-Farbe ────────────────────────────────────────── #}
+                    <div class="cp-setting-row">
+                        <div class="cp-setting-name">{{ L_('CAPTCHA:COLOR_SUCCESS') }}</div>
+                        <div class="cp-setting-value">
+                            <span class="altcha-color-control"><input type="color" class="altcha-native-color" value="{{ ALTCHA.color_success ? ALTCHA.color_success : '#16a34a' }}" data-color-target="altcha_color_success" aria-label="{{ L_('CAPTCHA:COLOR_SUCCESS') }}"><input type="text" id="altcha_color_success" name="altcha_color_success"
+                                   class="altcha-coloris" data-wbecoloris
+                                   value="{{ ALTCHA.color_success }}"
+                                   placeholder="#16a34a" pattern="#[0-9A-Fa-f]{6}"></span>
+                        </div>
+                    </div>
+
+                    {# ── Widget-Hintergrund ─────────────────────────────────── #}
+                    <div class="cp-setting-row">
+                        <div class="cp-setting-name">{{ L_('CAPTCHA:COLOR_BASE') }}</div>
+                        <div class="cp-setting-value">
+                            <span class="altcha-color-control"><input type="color" class="altcha-native-color" value="{{ ALTCHA.color_base ? ALTCHA.color_base : '#ffffff' }}" data-color-target="altcha_color_base" aria-label="{{ L_('CAPTCHA:COLOR_BASE') }}"><input type="text" id="altcha_color_base" name="altcha_color_base"
+                                   class="altcha-coloris" data-wbecoloris
+                                   value="{{ ALTCHA.color_base }}"
+                                   placeholder="#ffffff" pattern="#[0-9A-Fa-f]{6}"></span>
+                        </div>
+                    </div>
+
+                    {# ── Checkbox-Hintergrund ───────────────────────────────── #}
+                    <div class="cp-setting-row">
+                        <div class="cp-setting-name">{{ L_('CAPTCHA:COLOR_CHECKBOX') }}</div>
+                        <div class="cp-setting-value">
+                            <span class="altcha-color-control"><input type="color" class="altcha-native-color" value="{{ ALTCHA.color_checkbox ? ALTCHA.color_checkbox : '#ffffff' }}" data-color-target="altcha_color_checkbox" aria-label="{{ L_('CAPTCHA:COLOR_CHECKBOX') }}"><input type="text" id="altcha_color_checkbox" name="altcha_color_checkbox"
+                                   class="altcha-coloris" data-wbecoloris
+                                   value="{{ ALTCHA.color_checkbox }}"
+                                   placeholder="#ffffff" pattern="#[0-9A-Fa-f]{6}"></span>
+                        </div>
+                    </div>
+
+                    {# ── Textfarbe ──────────────────────────────────────────── #}
+                    <div class="cp-setting-row">
+                        <div class="cp-setting-name">{{ L_('CAPTCHA:COLOR_TEXT') }}</div>
+                        <div class="cp-setting-value">
+                            <span class="altcha-color-control"><input type="color" class="altcha-native-color" value="{{ ALTCHA.color_text ? ALTCHA.color_text : '#111827' }}" data-color-target="altcha_color_text" aria-label="{{ L_('CAPTCHA:COLOR_TEXT') }}"><input type="text" id="altcha_color_text" name="altcha_color_text"
+                                   class="altcha-coloris" data-wbecoloris
+                                   value="{{ ALTCHA.color_text }}"
+                                   placeholder="#111827" pattern="#[0-9A-Fa-f]{6}"></span>
+                        </div>
+                    </div>
+
+                    {# ── Eckenrundung ───────────────────────────────────────── #}
+                    <div class="cp-setting-row">
+                        <div class="cp-setting-name">{{ L_('CAPTCHA:BORDER_RADIUS') }}</div>
+                        <div class="cp-setting-value">
+                            <div class="altcha-h-radios">
+                                <label><input type="radio" name="altcha_border_radius" value=""
+                                    {{ ALTCHA.border_radius == ''    ? 'checked' : '' }}
+                                    onchange="altchaUpdatePreview()"> {{ L_('CAPTCHA:COLOR_DEFAULT') }}</label>
+                                <label><input type="radio" name="altcha_border_radius" value="0px"
+                                    {{ ALTCHA.border_radius == '0px' ? 'checked' : '' }}
+                                    onchange="altchaUpdatePreview()">
+                                    {{ L_('CAPTCHA:CORNER_SQUARE') }} <small>(0px)</small></label>
+                                <label><input type="radio" name="altcha_border_radius" value="4px"
+                                    {{ ALTCHA.border_radius == '4px' ? 'checked' : '' }}
+                                    onchange="altchaUpdatePreview()">
+                                    {{ L_('CAPTCHA:CORNER_LIGHT') }} <small>(4px)</small></label>
+                                <label><input type="radio" name="altcha_border_radius" value="12px"
+                                    {{ ALTCHA.border_radius == '12px' ? 'checked' : '' }}
+                                    onchange="altchaUpdatePreview()">
+                                    {{ L_('CAPTCHA:CORNER_ROUND') }} <small>(12px)</small></label>
+                            </div>
+                        </div>
+                    </div>
+                    </div>{# /cp-card-main #}
+
+                <div class="cp-card-aside">
+                {# ── Live-Vorschau ──────────────────────────────────────────── #}
+                <div class="cp-setting-row altcha-preview-row">
+                    <div class="cp-setting-name"><b>{{ L_('CAPTCHA:PREVIEW') }}</b></div>
+                    <div class="cp-setting-value">
+                        <div class="altcha-mock" id="altcha-mock">
+                            <div class="altcha-mock-body">
+                                <div class="altcha-mock-cb-pair">
+                                    <div class="altcha-mock-cb" id="altcha-mock-cb-un"></div>
+                                </div>
+                                <div class="altcha-mock-text" id="altcha-mock-text">{{ L_('CAPTCHA:WIDGET_CHECK_TEXT') }}</div>
+                                <span id="altcha-mock-logo" class="altcha-mock-logo" title="ALTCHA">
+                                    <svg width="24" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.33955 16.4279C5.88954 20.6586 12.1971 21.2105 16.4279 17.6604C18.4699 15.947 19.6548 13.5911 19.9352 11.1365L17.9886 10.4279C17.8738 12.5624 16.909 14.6459 15.1423 16.1284C11.7577 18.9684 6.71167 18.5269 3.87164 15.1423C1.03163 11.7577 1.4731 6.71166 4.8577 3.87164C8.24231 1.03162 13.2883 1.4731 16.1284 4.8577C16.9767 5.86872 17.5322 7.02798 17.804 8.2324L19.9522 9.01429C19.7622 7.07737 19.0059 5.17558 17.6604 3.57212C14.1104 -0.658624 7.80283 -1.21043 3.57212 2.33956C-0.658625 5.88958 -1.21046 12.1971 2.33955 16.4279Z" fill="currentColor"/><path d="M3.57212 2.33956C1.65755 3.94607 0.496389 6.11731 0.12782 8.40523L2.04639 9.13961C2.26047 7.15832 3.21057 5.25375 4.8577 3.87164C8.24231 1.03162 13.2883 1.4731 16.1284 4.8577L13.8302 6.78606L19.9633 9.13364C19.7922 7.15555 19.0335 5.20847 17.6604 3.57212C14.1104 -0.658624 7.80283 -1.21043 3.57212 2.33956Z" fill="currentColor"/><path d="M7 10H5C5 12.7614 7.23858 15 10 15C12.7614 15 15 12.7614 15 10H13C13 11.6569 11.6569 13 10 13C8.3431 13 7 11.6569 7 10Z" fill="currentColor"/></svg>
+                                </span>
+                            </div>
+                            <div class="altcha-mock-footer" id="altcha-mock-footer">
+                                <span>{{ L_('CAPTCHA:WIDGET_FOOTER_TEXT') }}</span>
+                            </div>
+                        </div>
+
+                        <div class="altcha-switch-list">
+                            <label class="captcha-switch altcha-switch-option">
+                                <input type="checkbox" id="altcha_hidefooter_cb" name="altcha_hidefooter" value="1"
+                                       {{ ALTCHA.hidefooter ? 'checked' : '' }}
+                                       onchange="altchaUpdatePreview()">
+                                <span class="captcha-slider" aria-hidden="true"></span>
+                                <span>{{ L_('CAPTCHA:HIDEFOOTER') }}</span>
+                            </label>
+                            <label class="captcha-switch altcha-switch-option">
+                                <input type="checkbox" id="altcha_hidelogo_cb" name="altcha_hidelogo" value="1"
+                                       {{ ALTCHA.hidelogo ? 'checked' : '' }}
+                                       onchange="altchaUpdatePreview()">
+                                <span class="captcha-slider" aria-hidden="true"></span>
+                                <span>{{ L_('CAPTCHA:HIDELOGO') }}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>{# /cp-card-aside #}
+                </section>{# /has-aside #}
+                {% endif %}
+                </section>{# /ALTCHA provider settings #}{% endif %}
+
+                {# ── Buttons ───────────────────────────────────────────────── #}
+                <div class="cp-buttons-row">
+                    <a href="{{ RETURN_TO_TOOLS }}" class="button">&laquo; {{ L_('TEXT:BACK') }}</a>
+                    <button type="submit" name="save_settings" class="button ico-save pos-right">
+                        {{ L_('TEXT:SAVE') }}
+                    </button>
+                </div>
+
+        </div>
+    </div>
+</form>
+<aside class="captcha-module-note"><i class="fa fa-info-circle" aria-hidden="true"></i><div>{{ L_("CAPTCHA:MODULES_SETTINGS_INFO") }}</div></aside>
+
+{% if IS_HTTPS %}
+<script>
+(function () {
+    'use strict';
+
+    function el(id) { return document.getElementById(id); }
+
+    // ── WbeColoris global config — labels come from wbeColoris.i18n.js ────────
+    if (typeof WbeColoris === 'function' && typeof WbeColoris.setInstance === 'function') { WbeColoris({
+        alpha:    false,
+        format:   'hex',
+        themeMode:'light',
+        okButton: true,
+        onChange: function () { altchaUpdatePreview(); }
+    });
+
+    // ── Per-field: swatches + defaultColor ────────────────────────────────────
+    WbeColoris.setInstance('#altcha_color_brand', {
+        defaultColor: '#6d28d9',
+        swatches: ['#6d28d9', '#2563eb', '#16a34a', '#ea580c', '#dc2626']
+    });
+    WbeColoris.setInstance('#altcha_color_success', {
+        defaultColor: '#16a34a',
+        swatches: ['#16a34a', '#2563eb', '#ea580c', '#dc2626', '#6d28d9']
+    });
+    WbeColoris.setInstance('#altcha_color_base', {
+        defaultColor: '#ffffff',
+        swatches: ['#ffffff', '#f9fafb', '#e5e7eb', '#374151', '#1f2937']
+    });
+    WbeColoris.setInstance('#altcha_color_checkbox', {
+        defaultColor: '#ffffff',
+        swatches: ['#ffffff', '#f9fafb', '#e5e7eb', '#374151', '#1f2937']
+    });
+    WbeColoris.setInstance('#altcha_color_text', {
+        defaultColor: '#111827',
+        swatches: ['#111827', '#374151', '#6b7280', '#f9fafb', '#ffffff']
+    }); }
+
+    document.querySelectorAll('.altcha-native-color[data-color-target]').forEach(function (picker) {
+        var textInput = el(picker.getAttribute('data-color-target'));
+        if (!textInput) { return; }
+        picker.addEventListener('input', function () {
+            textInput.value = picker.value;
+            textInput.dispatchEvent(new Event('input', { bubbles: true }));
+            altchaUpdatePreview();
+        });
+        textInput.addEventListener('input', function () {
+            if (/^#[0-9a-f]{6}$/i.test(textInput.value)) { picker.value = textInput.value; }
+        });
+    });
+
+    // ── Preview helpers ───────────────────────────────────────────────────────
+
+    // Rec. 601 luma contrast — mirrors PHP auto-contrast logic
+    function autoContrast(hex) {
+        if (!hex || hex.length !== 7) { return '#111827'; }
+        var rr = parseInt(hex.slice(1, 3), 16) / 255,
+            gg = parseInt(hex.slice(3, 5), 16) / 255,
+            bb = parseInt(hex.slice(5, 7), 16) / 255;
+        return (0.299 * rr + 0.587 * gg + 0.114 * bb) < 0.5 ? '#f9fafb' : '#111827';
+    }
+
+    function altchaUpdatePreview() {
+        var mock   = el('altcha-mock');
+        var footer = el('altcha-mock-footer');
+        var logo   = el('altcha-mock-logo');
+        var cbUn   = el('altcha-mock-cb-un');
+        var cbCh   = el('altcha-mock-cb');
+        var check  = el('altcha-mock-check');
+        var text   = el('altcha-mock-text');
+        if (!mock) { return; }
+
+        var brand   = el('altcha_color_brand').value   || '#6d28d9';
+        var success = el('altcha_color_success').value || '#16a34a';
+        var base    = el('altcha_color_base').value    || '#ffffff';
+        var cbBg    = el('altcha_color_checkbox').value;
+        var textRaw = el('altcha_color_text').value;
+
+        var color     = textRaw || autoContrast(base || '#ffffff');
+        var tickColor = autoContrast(success);
+
+        var radRadius = document.querySelector('[name="altcha_border_radius"]:checked');
+        var radius    = radRadius ? (radRadius.value || '6px') : '6px';
+
+        var hidefooter = el('altcha_hidefooter_cb') && el('altcha_hidefooter_cb').checked;
+        var hidelogo   = el('altcha_hidelogo_cb')   && el('altcha_hidelogo_cb').checked;
+
+        mock.style.background   = base;
+        mock.style.borderRadius = radius;
+        mock.style.borderColor  = (base === '#ffffff' || base === '') ? '#d1d5db' : base;
+
+        if (text)   { text.style.color = color; }
+        if (footer) { footer.style.display = hidefooter ? 'none' : ''; footer.style.color = color; }
+        if (logo)   { logo.style.display   = hidelogo   ? 'none' : ''; logo.style.color   = color; }
+
+        if (cbUn) { cbUn.style.borderColor = brand; cbUn.style.background = cbBg || base || '#ffffff'; }
+        if (cbCh) { cbCh.style.borderColor = success; cbCh.style.background = success; }
+        if (check) { check.style.color = tickColor; }
+    }
+
+    // Expose for inline onchange handlers (radios, checkboxes)
+    window.altchaUpdatePreview = altchaUpdatePreview;
+
+    // Initial render on page load
+    altchaUpdatePreview();
+}());
+</script>
+{% endif %}
+<script>
+(function(){
+    var uiText={{ UI_TEXT_JSON|raw }};
+    var radios=document.querySelectorAll('input[name="captcha_type"]');
+    function updateProvider(){
+        var checked=document.querySelector('input[name="captcha_type"]:checked')||document.querySelector('input[name="captcha_type"]');
+        var selected=checked?checked.value:'';
+        document.querySelectorAll('.captcha-provider').forEach(function(card){var active=card.querySelector('input').value===selected;card.classList.toggle('is-selected',active);var state=card.querySelector('.captcha-provider-state');if(state)state.textContent=active?uiText.active:'';if(active){var title=document.querySelector('[data-provider-intro-title]'),description=document.querySelector('[data-provider-intro-description]');if(title)title.textContent=card.getAttribute('data-provider-name')||selected;if(description)description.textContent=card.getAttribute('data-provider-description')||'';}});
+        document.querySelectorAll('.captcha-provider-settings').forEach(function(section){section.hidden=section.getAttribute('data-provider')!==selected;});
+    }
+    radios.forEach(function(radio){radio.addEventListener('change',updateProvider);});
+    document.querySelectorAll('.captcha-switch input[type="checkbox"]').forEach(function(toggle){toggle.addEventListener('change',function(){var state=toggle.closest('.captcha-switch').querySelector('[data-switch-state]');if(state)state.textContent=toggle.checked?uiText.enabled:uiText.disabled;});});
+    var loginToggle=document.querySelector('[data-login-captcha-toggle]'),loginOptions=document.querySelector('[data-login-captcha-options]'),loginSelect=document.getElementById('captcha-login-mode-select');
+    if(loginToggle&&loginOptions&&loginSelect){var updateLoginMode=function(){loginOptions.hidden=!loginToggle.checked;loginSelect.disabled=!loginToggle.checked;};loginToggle.addEventListener('change',updateLoginMode);updateLoginMode();}
+    var altchaProviderConfig=document.querySelector('.altcha-provider-config');
+    if(altchaProviderConfig){
+        var updateAltchaProviderPreview=function(){
+            var mock=altchaProviderConfig.querySelector('.altcha-provider-mock'),footer=altchaProviderConfig.querySelector('.altcha-provider-mock-footer'),logo=altchaProviderConfig.querySelector('.altcha-provider-mock-logo');
+            var field=function(name){return altchaProviderConfig.querySelector('[name="'+name+'"]');};
+            var value=function(name,fallback){var input=field(name);return input&&input.value?input.value:fallback;};
+            if(mock){mock.style.setProperty('--altcha-brand',value('altcha_color_brand','#2271b1'));mock.style.setProperty('--altcha-success',value('altcha_color_success','#16a34a'));mock.style.setProperty('--altcha-base',value('altcha_color_base','#ffffff'));mock.style.setProperty('--altcha-checkbox',value('altcha_color_checkbox','transparent'));mock.style.setProperty('--altcha-text',value('altcha_color_text','#111827'));mock.style.setProperty('--altcha-radius',value('altcha_border_radius','4px'));}
+            var hideFooter=field('altcha_hidefooter'),hideLogo=field('altcha_hidelogo');
+            if(mock){mock.classList.toggle('is-footer-hidden',!!(hideFooter&&hideFooter.checked));mock.classList.toggle('is-logo-hidden',!!(hideLogo&&hideLogo.checked));}
+            if(footer)footer.hidden=!!(hideFooter&&hideFooter.checked);
+            if(logo)logo.hidden=!!(hideLogo&&hideLogo.checked);
+        };
+        altchaProviderConfig.querySelectorAll('input,select').forEach(function(input){input.addEventListener('input',updateAltchaProviderPreview);input.addEventListener('change',updateAltchaProviderPreview);});
+        updateAltchaProviderPreview();
+    }
+    var settingsForm=document.querySelector('[data-captcha-settings-form]');
+    if(settingsForm){settingsForm.addEventListener('submit',function(event){
+        var submitter=event.submitter||document.activeElement;
+        if(!submitter||submitter.name!=='save_settings')return;
+        event.preventDefault();
+        if(settingsForm.getAttribute('aria-busy')==='true')return;
+        var original=submitter.textContent;settingsForm.setAttribute('aria-busy','true');submitter.disabled=true;submitter.textContent=uiText.saving;
+        var body=new FormData(settingsForm);body.set('save_settings','1');body.set('captcha_ajax','1');body.set('no_page','no_page');
+        var ftanField=settingsForm.querySelector('[data-captcha-ftan]');if(ftanField&&ftanField.name&&ftanField.getAttribute('data-captcha-ftan')){body.set(ftanField.name,ftanField.getAttribute('data-captcha-ftan'));}
+        fetch(settingsForm.action,{method:'POST',body:body,credentials:'same-origin',headers:{'X-Requested-With':'XMLHttpRequest','Accept':'application/json'}}).then(function(response){return response.json().catch(function(){throw new Error(uiText.invalidResponse);}).then(function(data){if(!response.ok||!data.success)throw new Error(data.message||('HTTP '+response.status));return data;});}).then(function(data){
+            if(data.ftan){var holder=document.createElement('div');holder.innerHTML=data.ftan;var fresh=holder.querySelector('input[type="hidden"]');if(fresh){var current=settingsForm.querySelector('input[type="hidden"][name="'+fresh.name.replace(/"/g,'\\"')+'"]');if(current){current.value=fresh.value;current.setAttribute('data-captcha-ftan',fresh.value);}else{fresh.setAttribute('data-captcha-ftan',fresh.value);settingsForm.insertBefore(fresh,settingsForm.firstChild);}}}
+            captchaSaveNotice(data.message||uiText.saveSuccess,'success');
+        }).catch(function(error){captchaSaveNotice(uiText.saveFailed+' '+error.message,'error');}).then(function(){settingsForm.removeAttribute('aria-busy');submitter.disabled=false;submitter.textContent=original;});
+    });}
+    function captchaSaveNotice(message,type){var old=document.querySelector('.captcha-save-toast');if(old)old.remove();var toast=document.createElement('div');toast.className='captcha-save-toast '+type;toast.textContent=message;toast.setAttribute('role','status');document.body.appendChild(toast);window.setTimeout(function(){toast.remove();},6000);}
+    updateProvider();
+}());
+</script>
+{% endautoescape %}

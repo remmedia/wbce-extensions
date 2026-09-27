@@ -1,0 +1,15 @@
+.cmc-app { font-family: inherit; color: var(--wbce-text-color, CanvasText); }
+.cmc-app form { margin: 0; padding: 1rem; border: 1px solid var(--wbce-border-color, currentColor); border-radius: var(--wbce-card-radius, 4px); background: var(--wbce-card-background, Canvas); box-shadow: var(--wbce-card-shadow, none); }
+.cmc-app .formRow { display: grid; grid-template-columns: minmax(180px, 28%) minmax(0, 1fr); gap: 1rem; align-items: start; padding: .85rem 0; border-bottom: 1px solid var(--wbce-border-color, currentColor); }
+.cmc-app .formRow:last-child { border-bottom: 0; }
+.cmc-app .settingName, .cmc-app .settingValue { float: none; width: auto; margin: 0; padding: 0; }
+.cmc-app .settingName { font-weight: 600; }
+.cmc-app select { width: min(100%, 420px); min-height: 36px; font: inherit; color: inherit; background: var(--wbce-input-background, Field); border-color: var(--wbce-border-color, currentColor); }
+.cmc-app .CodeMirror { width: 100%; border: 1px solid var(--wbce-border-color, currentColor); border-radius: var(--wbce-input-radius, 4px); }
+.cmc-app .formHint { float: none; margin-top: .55rem; color: var(--wbce-muted-color, GrayText); }
+.cmc-toast { position: fixed; z-index: 100000; right: 1.25rem; bottom: 1.25rem; max-width: min(420px, calc(100vw - 2.5rem)); padding: .8rem 1rem; border-left: 4px solid var(--wbce-success-color, #15803d); border-radius: var(--wbce-card-radius, 4px); background: var(--wbce-card-background, Canvas); color: var(--wbce-text-color, CanvasText); box-shadow: var(--wbce-card-shadow, 0 8px 28px rgba(0,0,0,.22)); opacity: 0; transform: translateY(12px); transition: .2s; }
+.cmc-toast.is-visible { opacity: 1; transform: none; }
+.cmc-toast.is-error { border-left-color: var(--wbce-danger-color, #b91c1c); }
+.cmc-app.is-saving { cursor: progress; }
+.cmc-app.is-saving form { opacity: .72; pointer-events: none; }
+@media (max-width: 700px) { .cmc-app .formRow { grid-template-columns: 1fr; gap: .4rem; } }

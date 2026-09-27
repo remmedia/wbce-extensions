@@ -1,0 +1,7 @@
+/* Login challenge only; profile pages inherit the active admin template. */
+.wac{color:var(--wbce-admin-text,#263238)}
+.wac>header{border-radius:var(--wbce-admin-radius,10px);background:linear-gradient(135deg,var(--wbce-admin-primary,#287fbd),var(--wbce-admin-primary-dark,#1f6fa8));box-shadow:var(--wbce-admin-shadow,0 3px 10px rgba(0,0,0,.12))}
+.wac form{border-color:var(--wbce-admin-border,#d7e1ea);border-radius:var(--wbce-admin-radius,10px);background:var(--wbce-admin-surface,#fff);color:var(--wbce-admin-text,#263238)}
+.wac select{border-color:var(--wbce-admin-border,#b8c5d0);background:var(--wbce-admin-surface,#fff);color:var(--wbce-admin-text,#263238)}
+.wac select:focus{border-color:var(--wbce-admin-primary,#287fbd);outline:2px solid var(--wbce-admin-primary,#287fbd);outline-offset:1px}
+.msg{border:1px solid var(--wbce-admin-border,#d7e1ea);border-left:5px solid var(--wbce-admin-success,#16a34a);background:var(--wbce-admin-surface,#fff);color:var(--wbce-admin-text,#263238)}

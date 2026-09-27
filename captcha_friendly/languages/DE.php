@@ -1,0 +1,5 @@
+<?php
+$CAPTCHA_PRECHECK_LABEL='Hook-Schnittstellen';
+$CAPTCHA_PROVIDER=array('name'=>'Friendly Captcha','description'=>'Unsichtbarer, barrierefreier Bot-Schutz ohne Cookies oder Bilderrätsel.','configure'=>'Friendly Captcha konfigurieren','sitekey'=>'Sitekey','api_key'=>'API-Schlüssel','keep_secret'=>'Leer lassen, um den vorhandenen Schlüssel beizubehalten','stored'=>'API-Schlüssel hinterlegt','region'=>'API-Region','eu'=>'EU','global'=>'Global','region_hint'=>'Der reine EU-Endpunkt setzt einen passenden Friendly-Captcha-Tarif voraus.','theme'=>'Darstellung','auto'=>'Automatisch','light'=>'Hell','dark'=>'Dunkel','start'=>'Start','automatic'=>'Automatisch','focus'=>'Bei Fokus','manual'=>'Manuell');
+$CAPTCHA_PROVIDER['not_configured']='Friendly Captcha ist noch nicht vollständig konfiguriert.';
+$CAPTCHA_PROVIDER+=array('registration_failed'=>'Die Friendly-Captcha-Modulregistrierung ist fehlgeschlagen.','hooks_required'=>'WBCE-1.7-Hook-API oder WBCE Hook Bridge 1.2.0','available'=>'Verfügbar','unavailable'=>'Nicht verfügbar');

@@ -1,0 +1,8 @@
+/* Login challenge only; profile pages inherit the active admin template. */
+.wa-admin{color:var(--wbce-admin-text,#263238)}
+.wa-admin>header{border-radius:var(--wbce-admin-radius,10px);background:linear-gradient(135deg,var(--wbce-admin-primary,#287fbd),var(--wbce-admin-primary-dark,#1f6fa8));box-shadow:var(--wbce-admin-shadow,0 3px 10px rgba(0,0,0,.12))}
+.wa-admin form{border-color:var(--wbce-admin-border,#d7e1ea);background:var(--wbce-admin-surface,#fff);color:var(--wbce-admin-text,#263238)}
+.wa-grid input{border-color:var(--wbce-admin-border,#b8c5d0);background:var(--wbce-admin-surface,#fff);color:var(--wbce-admin-text,#263238)}
+.wa-grid input:focus{border-color:var(--wbce-admin-primary,#287fbd);outline:2px solid var(--wbce-admin-primary,#287fbd);outline-offset:1px}
+.wa-toast{border:1px solid var(--wbce-admin-border,#d7e1ea);border-left:5px solid var(--wbce-admin-success,#16a34a);background:var(--wbce-admin-surface,#fff);color:var(--wbce-admin-text,#263238)}.wa-toast.error{border-left-color:var(--wbce-admin-danger,#dc2626)}
+.wap-async-toast{position:fixed;right:1.25rem;bottom:1.25rem;z-index:10000;max-width:min(28rem,calc(100vw - 2.5rem));padding:.8rem 1rem;border:1px solid var(--wbce-admin-border,#d7e1ea);border-left:5px solid var(--wbce-admin-success,#16a34a);border-radius:var(--wbce-admin-radius,8px);background:var(--wbce-admin-surface,#fff);color:var(--wbce-admin-text,#263238);box-shadow:var(--wbce-admin-shadow,0 8px 28px rgba(0,0,0,.18))}.wap-async-toast.error{border-left-color:var(--wbce-admin-danger,#dc2626)}

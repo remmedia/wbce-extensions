@@ -1,0 +1,2 @@
+<?php
+return array('title' => 'Magic Link', 'description' => 'Passwortlose Anmeldung über zeitlich begrenzte E-Mail-Links.', 'save' => 'Einstellungen speichern', 'saved' => 'Einstellungen gespeichert.', 'failed' => 'Speichern fehlgeschlagen.', 'enabled' => 'Provider aktivieren', 'scope' => 'Freigabe', 'scope_all' => 'Für alle Benutzer', 'scope_users' => 'Nur freigegebene Benutzer', 'scope_disabled' => 'Deaktiviert', 'field_expires_minutes' => 'Gültigkeit in Minuten', 'field_subject' => 'E-Mail-Betreff');

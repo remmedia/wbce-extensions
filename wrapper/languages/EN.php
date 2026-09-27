@@ -1,0 +1,20 @@
+<?php
+/**
+ * WBCE CMS
+ * Way Better Content Editing.
+ * Visit https://wbce.org to learn more and to join the community.
+ *
+ * @copyright Ryan Djurovich (2004-2009)
+ * @copyright WebsiteBaker Org. e.V. (2009-2015)
+ * @copyright WBCE Project (2015-)
+ * @license GNU GPL2 (or any later version)
+ */
+
+// English module description
+$module_description = 'This module allows you to edit the contents of a page using a graphical editor';
+$MOD_WRAPPER['MODULE_NAME'] = 'Wrapper';
+$MOD_WRAPPER['MODULE_DESCRIPTION'] = 'Embeds another website or relative WBCE URL in an accessible inline frame.';
+
+// Headings and text outputs
+$MOD_WRAPPER['NOTICE'] = 'Your browser does not support inline frames.<br />Click on the link below to visit the website that was meant to be shown here...<br />';
+$MOD_WRAPPER['INVALID_URL'] = 'Please use a relative address or an HTTP/HTTPS URL.';

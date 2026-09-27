@@ -1,0 +1,25 @@
+/* Visual contract supplied by the active WBCE admin theme. */
+.addon-monitor-tabs .current_tab a {
+    border-color: var(--wbce-admin-button-background, var(--wbce-admin-primary, currentColor)) !important;
+    background: var(--wbce-admin-button-background, var(--wbce-admin-primary, ButtonFace)) !important;
+    color: var(--wbce-admin-button-text, var(--wbce-admin-header-text, ButtonText)) !important;
+}
+.addon-monitor-tabs a:hover {
+    border-color: var(--wbce-admin-primary, currentColor) !important;
+    color: var(--wbce-admin-primary, currentColor) !important;
+}
+.addon-monitor-content .select_types label {
+    border-color: var(--wbce-admin-border, currentColor) !important;
+    border-radius: var(--wbce-admin-radius, 4px) !important;
+    background: var(--wbce-admin-surface, Canvas) !important;
+    color: var(--wbce-admin-text, CanvasText) !important;
+}
+.addon-monitor-content .clearbtn {
+    background: var(--wbce-admin-button-background, var(--wbce-admin-primary, ButtonFace)) !important;
+    color: var(--wbce-admin-button-text, ButtonText) !important;
+}
+.addon-monitor-content table,
+.addon-monitor-content th,
+.addon-monitor-content td {
+    color: var(--wbce-admin-text, CanvasText);
+}

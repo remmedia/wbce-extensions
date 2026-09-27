@@ -1,0 +1,57 @@
+<?php
+/**
+ * WBCE CMS
+ * Way Better Content Editing.
+ * Visit https://wbce.org to learn more and to join the community.
+ *
+ * @copyright    Ryan Djurovich (2004-2009)
+ * @copyright    WebsiteBaker Org. e.V. (2009-2015)
+ * @copyright    WBCE Project (2015-)
+ * @category     tool
+ * @package      OPF E-Mail
+ * @version      1.1.9
+ * @authors      Martin Hecht (mrbaseman)
+ * @link         https://forum.wbce.org/viewtopic.php?id=176
+ * @license      GNU GPL2 (or any later version)
+ * @platform     WBCE 1.x
+ * @requirements OutputFilter Dashboard 1.5.x and PHP 5.4 or higher
+ *
+ **/
+
+/* -------------------------------------------------------- */
+// Must include code to stop this file being accessed directly
+if (!defined('WB_PATH')) {
+    // Stop this file being access directly
+    if (!headers_sent()) {
+        header("Location: ../index.php", true, 301);
+    }
+    die('<head><title>Access denied</title></head><body><h2 style="color:red;margin:3em auto;text-align:center;">Cannot access this file directly</h2></body></html>');
+}
+/* -------------------------------------------------------- */
+
+if (defined('WB_URL') && file_exists(WB_PATH.'/modules/outputfilter_dashboard/functions.php')) {
+    require_once WB_PATH.'/modules/outputfilter_dashboard/functions.php';
+    foreach (array('opf_email_filter'=>1,'opf_mailto_filter'=>1,'opf_js_mailto'=>1,'opf_at_replacement'=>'(at)','opf_dot_replacement'=>'(dot)') as $name=>$default) {
+        if (Settings::Get($name, null) === null) Settings::Set($name, $default, false);
+    }
+    if (opf_is_registered('E-Mail')) opf_unregister_filter('E-Mail');
+    if (opf_is_registered('E-Mail Masking')) return true;
+    return opf_register_filter(
+            [
+                'name' => 'E-Mail Masking',
+                'type' => OPF_TYPE_PAGE,
+                'file' => '{SYSVAR:WB_PATH}/modules/mod_opf_email/filter.php',
+                'funcname' => 'opff_mod_opf_email',
+                'desc' => [
+                    'EN' => "Hides e-mail addresses from spambots by masking them with JavaScript and replacing . and @ by (dot) and (at). Can be configured via backend (see cog icon).",
+                    'DE' => "Versteckt E-Mail-Adressen vor Spambots, indem diese mit Javascript maskiert werden und die Zeichen . und @ durch (dot) und (at) ersetzt werden. Kann über das Backend konfiguriert werden (siehe Zahnrad-Icon)."
+                ],
+                'active' => (Settings::Get('opf_email_filter', 1) || Settings::Get('opf_mailto_filter', 1) || Settings::Get('opf_js_mailto', 1)) ? 1 : 0,
+                'allowedit' => 0,
+                'configurl' => ADMIN_URL . '/admintools/tool.php?tool=mod_opf_email',
+                'pages_parent' => 'all,search'
+            ]
+        );
+}
+
+return false;

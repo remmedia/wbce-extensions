@@ -1,0 +1,62 @@
+<?php
+/**
+ * Updater - Uninstall Script
+ *
+ * Wird beim Deinstallieren des Moduls ausgeführt
+ * Räumt temporäre Dateien und Cache auf
+ *
+ * @category    module
+ * @package     updater
+ * @version     1.0.2
+ * @author      WBCE Community
+ * @copyright   2026 WBCE Community
+ * @license     MIT License
+ */
+
+// prevent this file from being accessed directly
+if (!defined('WB_PATH')) {
+    exit('Direct access to this file is not allowed');
+}
+
+// Clean up cache file
+$cache_file = WB_PATH . '/temp/.wbce_releases_cache.json';
+if (file_exists($cache_file)) {
+    @unlink($cache_file);
+}
+
+// Clean up any leftover temporary files
+$temp_files = [
+    WB_PATH . '/temp_download.zip',
+    WB_PATH . '/temp_upload.zip',
+    WB_PATH . '/wbceup.zip',
+    WB_PATH . '/wbce_update_unzip.php'
+];
+
+foreach ($temp_files as $temp_file) {
+    if (file_exists($temp_file)) {
+        @unlink($temp_file);
+    }
+}
+
+$chunk_dir = WB_PATH . '/temp/updater_chunks';
+if (is_dir($chunk_dir)) {
+    foreach (glob($chunk_dir . '/*') ?: array() as $chunk_file) {
+        if (is_file($chunk_file)) {
+            @unlink($chunk_file);
+        }
+    }
+    @rmdir($chunk_dir);
+}
+
+// Clean up var/logs directory if it was created by this module and is now empty
+$logs_dir = WB_PATH . '/var/logs';
+if (is_dir($logs_dir) && count(array_diff(scandir($logs_dir), ['.', '..'])) === 0) {
+    @rmdir($logs_dir);
+    $var_dir = WB_PATH . '/var';
+    if (is_dir($var_dir) && count(array_diff(scandir($var_dir), ['.', '..'])) === 0) {
+        @rmdir($var_dir);
+    }
+}
+
+// Return success status to WBCE
+return true;

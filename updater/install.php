@@ -1,0 +1,22 @@
+<?php
+/**
+ * Updater - Install Script
+ *
+ * Wird beim Deinstallieren des Moduls ausgeführt
+ * Räumt temporäre Dateien und Cache auf
+ *
+ * @category    module
+ * @package     updater
+ * @version     1.0.2
+ * @author      WBCE Community
+ * @copyright   2026 WBCE Community
+ * @license     MIT License
+ */
+
+// Must include code to stop this file being access directly
+if (defined('WB_PATH') == false) {
+    die("Cannot access this file directly");
+}
+
+require_once(WB_PATH.'/framework/functions.php');
+make_dir(WB_PATH.'/var/logs', OCTAL_DIR_MODE, true);

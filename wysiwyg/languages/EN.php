@@ -1,0 +1,19 @@
+<?php
+/**
+ * WBCE CMS
+ * Way Better Content Editing.
+ * Visit https://wbce.org to learn more and to join the community.
+ *
+ * @copyright Ryan Djurovich (2004-2009)
+ * @copyright WebsiteBaker Org. e.V. (2009-2015)
+ * @copyright WBCE Project (2015-)
+ * @license GNU GPL2 (or any later version)
+ */
+
+// English Modul description
+$module_description = 'Basic WYSIWYG editor field';
+$MOD_WYSIWYG['MODULE_NAME'] = 'WYSIWYG';
+$MOD_WYSIWYG['MODULE_DESCRIPTION'] = $module_description;
+
+// Module language vars
+$MOD_WYSIWYG['WYSIWYG'] ="WYSIWYG";

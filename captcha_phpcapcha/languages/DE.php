@@ -1,0 +1,3 @@
+<?php
+$CAPTCHA_PRECHECK_LABEL='Hook-Schnittstellen';
+$CAPTCHA_PROVIDER=array('name'=>'phpcapcha','description'=>'Klassisches, vollständig lokal erzeugtes Sicherheitsbild über PHP-GD.','configure'=>'phpcapcha konfigurieren','length'=>'Zeichenanzahl','timeout'=>'Gültigkeitsdauer in Sekunden','gd_required'=>'PHP-GD wird für dieses CAPTCHA benötigt.','image_alt'=>'Bild mit Sicherheitscode','input_label'=>'Sicherheitscode eingeben','secure_random_required'=>'Für dieses CAPTCHA wird eine sichere Zufallsquelle benötigt.','registration_failed'=>'Die phpcapcha-Modulregistrierung ist fehlgeschlagen.','hooks_required'=>'WBCE-1.7-Hook-API oder WBCE Hook Bridge 1.2.0','available'=>'Verfügbar','unavailable'=>'Nicht verfügbar');

@@ -1,0 +1,25 @@
+.wbce-ai-image {
+    --wbce-ai-label-text: attr(data-wbce-ai-label);
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+}
+
+.wbce-ai-image > img { max-width: 100%; }
+
+.wbce-ai-image::after,
+.wbce-ai-image-inline > img[data-wbce-ai-generated="true"] + .wbce-ai-label {
+    content: var(--wbce-ai-label-text);
+    position: absolute;
+    right: var(--wbce-ai-label-right, .35rem);
+    bottom: var(--wbce-ai-label-bottom, .35rem);
+    z-index: var(--wbce-ai-label-z-index, 2);
+    padding: var(--wbce-ai-label-padding, .12rem .35rem);
+    border-radius: var(--wbce-ai-label-radius, .18rem);
+    color: var(--wbce-ai-label-color, rgba(255, 255, 255, .78));
+    background: var(--wbce-ai-label-background, rgba(20, 25, 30, .38));
+    font: var(--wbce-ai-label-font, 500 clamp(.58rem, 1.4vw, .7rem)/1.2 sans-serif);
+    pointer-events: none;
+    white-space: nowrap;
+}
+@import url('../../include/font-awesome/css/font-awesome.min.css');

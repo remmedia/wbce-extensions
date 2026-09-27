@@ -1,0 +1,10 @@
+<?php
+return array(
+    'module_name'=>'Accessibility Tools','module_description'=>'Globale, sprachabhängige und zentral konfigurierbare Bedienungshilfen für WBCE-Frontendseiten.',
+    'title'=>'Accessibility Tools','intro'=>'Bedienungshilfen im Frontend zentral aktivieren und konfigurieren.','enabled'=>'Bedienungshilfen aktiv',
+    'position_desktop'=>'Position auf Bildschirmen','position_mobile'=>'Position auf Mobilgeräten','left'=>'Links mittig','right'=>'Rechts mittig','top'=>'Oben mittig','bottom'=>'Unten mittig','top_left'=>'Oben links','top_right'=>'Oben rechts','bottom_left'=>'Unten links','bottom_right'=>'Unten rechts',
+    'features'=>'Verfügbare Werkzeuge','save'=>'Einstellungen speichern','saved'=>'Einstellungen wurden gespeichert.','error'=>'Einstellungen konnten nicht gespeichert werden.','database_unavailable'=>'Die Einstellungen können derzeit nicht auf die Datenbank zugreifen.','write_failed'=>'Die Einstellungen konnten nicht in der Datenbank gespeichert werden.','open_tools'=>'Bedienungshilfen öffnen',
+    'invert'=>'Farben umkehren','grayscale'=>'Graustufen','saturation'=>'Sättigung','links'=>'Links hervorheben','font_size'=>'Schriftgröße','line_height'=>'Zeilenhöhe','letter_spacing'=>'Zeichenabstand','text_align'=>'Textausrichtung','contrast'=>'Kontrast','hide_images'=>'Bilder ausblenden','hide_video'=>'Videos ausblenden','cursor'=>'Mauszeigerhilfe','position_controls'=>'Position im Frontend änderbar',
+    'open_close'=>'Bedienungshilfen öffnen oder schließen','reset_all'=>'Alles zurücksetzen',
+    'frontend_translations'=>array('Accessibility Tools'=>'Bedienungshilfen','Invert Colours'=>'Farben umkehren','Grayscale'=>'Graustufen','Low Saturation'=>'Niedrige Sättigung','High Saturation'=>'Hohe Sättigung','Links Highlight'=>'Links hervorheben','Font Size'=>'Schriftgröße','Line Height'=>'Zeilenhöhe','Letter Spacing'=>'Zeichenabstand','Text Align'=>'Textausrichtung','Contrast'=>'Kontrast','Hide image'=>'Bilder ausblenden','Hide video'=>'Videos ausblenden','Change Cursors'=>'Mauszeiger ändern','Reset All'=>'Alles zurücksetzen')
+);

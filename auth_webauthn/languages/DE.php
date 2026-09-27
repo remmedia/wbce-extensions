@@ -1,0 +1,2 @@
+<?php
+return array('title' => 'Passkey-Anmeldung', 'description' => 'Passkeys und Sicherheitsschlüssel für die primäre Anmeldung.', 'save' => 'Einstellungen speichern', 'saved' => 'Einstellungen gespeichert.', 'failed' => 'Speichern fehlgeschlagen.', 'enabled' => 'Provider aktivieren', 'scope' => 'Freigabe', 'scope_all' => 'Für alle Benutzer', 'scope_users' => 'Nur freigegebene Benutzer', 'scope_disabled' => 'Deaktiviert', 'field_rp_id' => 'Relying-Party-ID', 'field_user_verification' => 'Benutzerprüfung');

@@ -1,0 +1,66 @@
+{% extends "_framer.twig" %}
+{% block content %}  
+
+<div class="cpForm">
+    <form name="cmc_settings" id="cmc-settings" action="{{ saveUrl }}" method="post">
+        <input type="hidden" name="{{ FTAN_NAME }}" value="{{ FTAN_VALUE }}" data-cmc-ftan="{{ FTAN_VALUE }}">
+        <div class="formRow">
+            <div class="settingName"><label for="select">{{ CMC.theme }}</label></div>
+            <div class="settingValue">
+                <select id="select" name="theme">
+                    <option value="0" disabled>{{ CMC.please_select }} &hellip;</option>
+                    {% for p in aThemeFiles|reverse %}
+                        {% set name = p|split('.')[0] %}
+                        {% set sel = (name == cfg.theme) ? " selected" : "" %}
+                        <option value="{{ name }}" {{ sel }}>{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+                
+        <div class="formRow fullValue">        
+            <div class="settingName">
+                <label for="code">{{ CMC.code }}</label></div>
+            <div class="settingValue">                
+                <textarea id="code" name="code">{{ cmc_code_sample }}</textarea>
+                <div class="formHint">
+                    <b>{{ CMC.hint_title }}</b> {{ CMC.fullscreen_hint }}
+                </div>
+            </div>
+        </div> 
+        
+        <div class="formRow">
+            <div class="settingName">
+                <label for="font_sel">{{ CMC.font_name }}</label>
+            </div>            
+            <div class="settingValue">
+                <select id="font_sel" name="font">
+                    <option value="0" disabled>{{ CMC.please_select }} &hellip;</option>
+                    {% for p in aFontFiles %}
+                        {% set name = p|split('.')[0] %}
+                        {% set sel = (name == cfg.font) ? " selected" : "" %}
+                        <option value="{{ name }}"{{ sel }}>{{ name }}</option>
+                    {% endfor %}
+                </select>                
+            </div>
+        </div>	
+        <div class="formRow">
+            <div class="settingName">
+                <label for="font_size">{{ CMC.font_size }}</label>
+            </div>            
+            <div class="settingValue">
+                <select id="font_size" name="font_size">
+                    <option value="0" disabled>{{ CMC.please_select }} &hellip;</option>
+                    {% for p in aFontSizes %}
+                        {% set sel = (p == cfg.font_size) ? " selected" : "" %}
+                        <option value="{{ p }}"{{ sel }}>{{ p }}px</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>	
+        
+        <div class="buttonsRow"><button class="button ico-save pos-right" name="save" type="submit">{{ CMC.save }}</button></div>
+    </form>
+</div>
+    
+{% endblock %}

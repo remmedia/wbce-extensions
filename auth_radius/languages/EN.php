@@ -1,0 +1,2 @@
+<?php
+return array('title' => 'RADIUS', 'description' => 'Anmeldung gegen einen RADIUS-Server.', 'save' => 'Save settings', 'saved' => 'Settings saved.', 'failed' => 'Saving failed.', 'enabled' => 'Enable provider', 'scope' => 'Availability', 'scope_all' => 'All users', 'scope_users' => 'Granted users only', 'scope_disabled' => 'Disabled', 'field_host' => 'RADIUS-Server', 'field_port' => 'Port', 'field_secret' => 'Shared Secret', 'field_nas_identifier' => 'NAS-Identifier');

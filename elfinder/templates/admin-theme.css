@@ -1,0 +1,24 @@
+/* Keep elFinder functional styling isolated while inheriting the active WBCE theme visually. */
+:root {
+  --elfinder-bg: var(--wbce-card-bg, var(--wbce-card-background, var(--color-surface, #fff)));
+  --elfinder-surface: var(--wbce-input-bg, var(--wbce-input-background, var(--color-background, #f6f8fb)));
+  --elfinder-text: var(--wbce-text, var(--wbce-text-color, var(--color-text, #202833)));
+  --elfinder-border: var(--wbce-border, var(--wbce-border-color, var(--color-border, #cbd3de)));
+  --elfinder-accent: var(--wbce-primary, var(--wbce-primary-color, var(--color-primary, #2474b5)));
+}
+html, body.wbce-elfinder { background:var(--elfinder-bg); color:var(--elfinder-text); }
+.wbce-elfinder .elfinder { border-color:var(--elfinder-border); background:var(--elfinder-bg); color:var(--elfinder-text); }
+.wbce-elfinder .elfinder-toolbar,
+.wbce-elfinder .elfinder-navbar,
+.wbce-elfinder .elfinder-statusbar { background:var(--elfinder-surface); color:var(--elfinder-text); border-color:var(--elfinder-border); }
+.wbce-elfinder .elfinder-button,
+.wbce-elfinder .elfinder-button-icon,
+.wbce-elfinder .elfinder-navbar-icon { color:var(--elfinder-text) !important; }
+.wbce-elfinder .elfinder-cwd-file.ui-selected,
+.wbce-elfinder .elfinder-navbar-dir.ui-state-active { background:color-mix(in srgb, var(--elfinder-accent) 18%, white); color:var(--elfinder-text); }
+.wbce-elfinder input,
+.wbce-elfinder select { background:var(--elfinder-bg); color:var(--elfinder-text); border-color:var(--elfinder-border); }
+@supports not (background: color-mix(in srgb, black 10%, white)) {
+  .wbce-elfinder .elfinder-cwd-file.ui-selected,
+  .wbce-elfinder .elfinder-navbar-dir.ui-state-active { background:#dcecf8; }
+}

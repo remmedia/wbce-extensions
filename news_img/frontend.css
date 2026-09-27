@@ -1,0 +1,36 @@
+
+
+/*** Don't remove the class nixhier, this is required for ASP ***/
+.nixhier {
+	display: none;
+}
+
+/* Shared AI-image disclosure. Frontend templates can override either these
+   classes or the --wbce-ai-label-* custom properties. */
+.wbce-ai-image {
+	position: relative;
+	display: inline-block;
+	max-width: 100%;
+	line-height: 0;
+}
+
+.wbce-ai-image > img {
+	max-width: 100%;
+}
+
+.wbce-ai-label {
+	position: absolute;
+	right: var(--wbce-ai-label-right, .35rem);
+	bottom: var(--wbce-ai-label-bottom, .35rem);
+	z-index: var(--wbce-ai-label-z-index, 2);
+	padding: var(--wbce-ai-label-padding, .12rem .35rem);
+	border-radius: var(--wbce-ai-label-radius, .18rem);
+	color: var(--wbce-ai-label-color, rgba(255, 255, 255, .78));
+	background: var(--wbce-ai-label-background, rgba(20, 25, 30, .38));
+	font-family: var(--wbce-ai-label-font-family, sans-serif);
+	font-size: var(--wbce-ai-label-font-size, clamp(.58rem, 1.4vw, .7rem));
+	font-weight: var(--wbce-ai-label-font-weight, 500);
+	line-height: 1.2;
+	pointer-events: none;
+	white-space: nowrap;
+}

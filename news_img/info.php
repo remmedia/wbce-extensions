@@ -1,0 +1,148 @@
+<?php
+/**
+ *
+ * @category        modules
+ * @package         news_img
+ * @author          WBCE Community
+ * @copyright       2004-2009, Ryan Djurovich
+ * @copyright       2009-2010, Website Baker Org. e.V.
+ * @copyright       2019-, WBCE Community
+ * @link            https://www.wbce.org/
+ * @license         https://www.gnu.org/licenses/gpl.html
+ * @platform        WBCE
+ *
+ */
+
+$module_directory   = 'news_img';
+$module_uuid = '89ce5b87-f07e-4448-ad47-f540ebbe306e';
+$module_name        = 'News with Images';
+$module_function    = 'page';
+$module_version     = '5.2.3';
+$module_platform    = '1.4';
+$module_requires_php = '8.2.0';
+$module_author      = 'Ryan Djurovich, Rob Smith, Silvia Reins, Martin Hecht, Florian Meerwinck, Bianka Martinovic';
+$module_license     = 'GNU General Public License';
+$module_description = 'This page module is designed for making a news page with images and lightbox effect.';
+
+/**
+ * v5.0.30 - 2025/12/30
+ *         - webbird, florian
+ *         ! bugfix for deprecated issue caused by tag sanitzing
+ *
+ * v5.0.31 - 2026/05/11
+ *         - stefanek
+ *         ! gallery related bugfix
+ *
+ * v5.0.29 - 2025/12/01
+ *         - mrbaseman
+ *         ! tag sanitizing 
+ *
+ * v5.0.28 - 2024/09/26
+ *         - mrbaseman
+ *         * add sorting order: expiration date ascending
+ *         ! bug fix for v5.0.27 concerning access files 
+ *         ! complete the language files
+ *
+ * v5.0.27 - 2024/09/25
+ *         - mrbaseman
+ *         * add mass actions to clear publication and expiration date
+ *
+ * v5.0.26 - 2024/05/26
+ *         - florian
+ *         * add TAGLIST feature
+ *
+ * v5.0.25 - 2024/01/31
+ *         - florian
+ *         ! fix issue with droplet fetchNewsItems (aka getnewsitems, which caused unwanted overwriting of droplet from NIA with the same name)
+ *
+ * v5.0.24 - 2023/11/20
+ *         - mrbaseman
+ *         ! fix post_id in access file for next/prev pages
+ 
+ * v5.0.23 - 2023/11/20
+ *         - florian
+ *         ! fix sorting issue due to group assignment (undo changes from 5.0.13)
+ *
+ * v5.0.22 - 2023/06/17
+ *         - florian
+ *         ! fixing issues with missing accessfiles due to post activation handling
+ *
+ * v5.0.21 - 2023/04/18
+ *         - florian
+ *         ! several bugfixes (see Github commits) 
+ *
+ * v5.0.20 - 2023/04/09
+ *		   - florian
+ *         ! fix update issue with new setting show_settings_only_admins
+ *         * better handling of post activation (remove / rebuild access file)
+ *
+ * v5.0.19 - 2023/02/01
+ *		   - florian
+ *         ! missing changes on upgrade.php in single install package. no changes in WBCE core repo.
+ * 
+ * v5.0.18 - 2023/01/27
+ *         - florian
+ *         ! fix issue with non-replacement of {SYSVAR:MEDIA_REL}
+ *
+ * v5.0.17 - 2022-11-14
+ *         - florian         
+ *         * add option to show settings only admins
+
+ * v5.0.16 - 2022-08-15
+ *         - florian         
+ *         ! PHP 8.1 fixes    
+ *
+ * v5.0.15 - 2022-03-05
+ *         - webbird
+ *           ! fixed upgrade changes wrong version number
+ *
+ * v5.0.14 - 2022-02-08
+ *         - florian
+ *           * Add [AOPEN] [ACLOSE] placeholders + webp compatibility
+ *
+ * v5.0.13 - 2021-12-25
+ *         - gchriz
+ *           * Add missing option 4 and make "order news by group" working
+ *
+ * v5.0.12 - 2021-12-10
+ *         - Florian
+ *           * fix rss.php (require section_id for sql query instead of page_id since page_id is no longer stored in news_img_post table)
+ *
+ * v5.0.11 - 2021-10-09
+ *         - Florian
+ *           * added HREF placeholder
+ *
+ * v5.0.10 - 2021-10-02
+ *         - Florian
+ *           ! fixed deleted tags are still in database
+ *           * added Sort tags ascending
+ *
+ * v5.0.9  - 2021-09-19
+ *         - Florian
+ *           ! remove image database changes for unfinished image handling from upgrade.php
+ *           ! Post images can be either deleted or replaced now (w/o deleting the old image file)
+ *           ! Remove unnecessary sorting option PostID
+ *           * improved view management: views/default/config.private.php -> views/default/config.php -> add.php
+ *
+ * v5.0.8  - 2021-07-11
+ *         - Florian
+ *           * better prev/next navigation when group is selected
+ *
+ * v5.0.7  - 2020-09-20
+ *         - Various
+ *           ! fixed languages files
+ *           ! fixed import script
+ *           ! fixed post_id
+ *
+ * v5.0.6  - 2020-07-20
+ *         - Florian
+ *           ! Remove unnecessary link to frotorama.css from frontend.css
+ *
+ * v5.0.5  - 2020-07-18
+ *         - Florian
+ *           ! fix wrong likn to fotorama.css (reported by klawin)
+ *
+ * v5.0.4  - 2020-06-18
+ *         - Colinax
+ *           ! fix error in install.php
+ **/

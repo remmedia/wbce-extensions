@@ -1,0 +1,3 @@
+<?php
+$CAPTCHA_PRECHECK_LABEL='Hook-Schnittstellen';
+$CAPTCHA_PROVIDER=array('name'=>'CAP','description'=>'Unsichtbarer Proof-of-Work-Schutz über einen selbst gehosteten CAP-Dienst.','configure'=>'CAP konfigurieren','endpoint'=>'CAP-Endpunkt','site_key'=>'Site-Key','secret'=>'Secret','keep_secret'=>'Leer lassen, um das vorhandene Secret beizubehalten','stored'=>'Secret ist sicher gespeichert.','not_configured'=>'CAP ist noch nicht vollständig konfiguriert.','initial'=>'Sicherheitsprüfung','verifying'=>'Wird geprüft …','solved'=>'Erfolgreich geprüft','registration_failed'=>'Die CAP-Modulregistrierung ist fehlgeschlagen.','hooks_required'=>'WBCE-1.7-Hook-API oder WBCE Hook Bridge 1.2.0','available'=>'Verfügbar','unavailable'=>'Nicht verfügbar');

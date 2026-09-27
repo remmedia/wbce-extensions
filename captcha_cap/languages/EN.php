@@ -1,0 +1,3 @@
+<?php
+$CAPTCHA_PRECHECK_LABEL='Hook interfaces';
+$CAPTCHA_PROVIDER=array('name'=>'CAP','description'=>'Invisible proof-of-work protection using a self-hosted CAP service.','configure'=>'Configure CAP','endpoint'=>'CAP endpoint','site_key'=>'Site key','secret'=>'Secret','keep_secret'=>'Leave empty to keep the existing secret','stored'=>'The secret is stored securely.','not_configured'=>'CAP is not fully configured yet.','initial'=>'Security check','verifying'=>'Verifying …','solved'=>'Successfully verified','registration_failed'=>'The CAP add-on registration failed.','hooks_required'=>'WBCE 1.7 hook API or WBCE Hook Bridge 1.2.0','available'=>'Available','unavailable'=>'Unavailable');

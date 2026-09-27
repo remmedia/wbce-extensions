@@ -1,0 +1,3 @@
+<?php
+$CAPTCHA_PRECHECK_LABEL='Hook interfaces';
+$CAPTCHA_PROVIDER=array('name'=>'IconCaptcha','description'=>'Self-hosted, mobile-friendly selection of the unique icon.','configure'=>'Configure IconCaptcha','timeout'=>'Validity period in seconds','question'=>'Which symbol appears only once?','option_label'=>'Symbol %1$d: %2$s','selected'=>'Symbol selected','circle'=>'circle','diamond'=>'diamond','triangle'=>'triangle','square'=>'square','star'=>'star','heart'=>'heart','pentagon'=>'pentagon','hexagon'=>'hexagon','secure_random_required'=>'IconCaptcha requires a secure random source.','registration_failed'=>'The IconCaptcha add-on registration failed.','hooks_required'=>'WBCE 1.7 hook API or WBCE Hook Bridge 1.2.0','available'=>'Available','unavailable'=>'Unavailable');

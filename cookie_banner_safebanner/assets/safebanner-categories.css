@@ -1,0 +1,2 @@
+/* WBCE-Erweiterung: Widerruf ohne Änderung des SafeBanner-Originals */
+.wbce-safebanner-revoke{position:fixed;z-index:10000;left:1rem;bottom:0;padding:.5rem .85rem;border:1px solid #1769aa;border-radius:.35rem .35rem 0 0;background:#fff;color:#1769aa;font:600 .875rem/1.2 system-ui,sans-serif;cursor:pointer;box-shadow:0 0 .5rem rgba(0,0,0,.18)}.wbce-safebanner-revoke:hover,.wbce-safebanner-revoke:focus{background:#1769aa;color:#fff}.cm-banner:not(.cm-visible)~.wbce-safebanner-revoke{display:none}

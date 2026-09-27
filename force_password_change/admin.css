@@ -1,0 +1,12 @@
+/* Geometry only. Colors, borders, typography and controls come from the active admin theme. */
+.force-password-change-option{box-sizing:border-box;grid-column:1/-1;margin:.65rem 0 0;padding:1rem}
+.force-password-change-option label{display:flex;align-items:flex-start;gap:.75rem;margin:0;cursor:pointer}
+.force-password-change-option span,.force-password-change-option strong,.force-password-change-option small{display:block}
+.force-password-change-option span{flex:1;min-width:0}.force-password-change-option small{margin-top:.2rem;line-height:1.4}
+.force-password-shell{display:grid;width:100%;max-width:760px;margin:1rem auto;gap:1rem}.force-password-shell>.content-box{margin:0}
+.force-password-head h2,.force-password-head p{margin:0}.force-password-head p{margin-top:.3rem}
+.force-password-grid{display:grid;grid-template-columns:minmax(11rem,32%) minmax(0,1fr);gap:1rem;align-items:center}.force-password-grid label{font-weight:700}.force-password-grid input{box-sizing:border-box;width:100%;max-width:none;min-height:2.75rem}
+.force-password-actions{display:flex;justify-content:flex-end;gap:.75rem;margin-top:1.2rem;padding-top:1rem}
+.force-password-actions button:disabled{cursor:wait;opacity:.65}
+[data-password-error][hidden]{display:none!important}
+@media(max-width:620px){.force-password-grid{grid-template-columns:1fr;gap:.4rem}}

@@ -1,0 +1,57 @@
+<?php
+/**
+ *
+ * @category        modules
+ * @package         miniform
+ * @author          Ruud Eisinga / Dev4me
+ * @link			http://www.dev4me.nl/modules-snippets/opensource/miniform/
+ * @license         http://www.gnu.org/licenses/gpl.html
+ * @platform        WebsiteBaker 2.8.x / WBCE CMS 1.x
+ * @requirements    PHP 5.6 and higher
+ * @version         0.23.1
+ * @lastmodified    July 13, 2024
+ *
+ * v0.23.3 - Fix issue with AJAX message delete	(reported by Peter Reporter) (Florian)
+ * v0.23.2 - Fix for the fix										  (Ruud)
+ * v0.23.1 - Fix issue with AJAX message delete	(reported by young pope) (Ruud)
+ * v0.23 - fix for missing captcha in linked forms					  (Ruud)
+ * v0.22 - MYSQL_ASSOC -> MYSQLI_ASSOC								  (Bernd)
+ * v0.21 - Move 'modify template' to separate page.                   (Stefanek)
+ * v0.20 - Handles a bug with save file reported by user colinax.     (Stefanek)
+ * v0.19 - Implement AdminTool functionality (WBCE CMS only).         (Stefanek)
+ * v0.18 - Small correction in Ajax delete function.                  (Stefanek)
+ *         Added support for Bootstrap alerts.                        (Stefanek)
+ * v0.17 - Ajax integration to "delete" messages without page reload. (Stefanek)
+ * v0.16 - Ajax integration to "load more" messages in the backend.   (Stefanek)
+ * v0.15 - fixed bug when quotes are used in values
+ *       - fixed compatibility issue with WBCE 1.4
+ * v0.14 - fixed ajax file-upload issue IOS
+ * v0.13 - fixed ajax caching problem for IOS
+ * 	       added referer for email-template. use {REFERER}
+ * v0.12 - added sender_email, session-data storing, removed autoTLS disable
+ * v0.11 - added ajax handling
+ *
+ */
+
+$module_directory = 'miniform';
+$module_uuid = '6b513526-1818-4960-9b53-c16ca143f3a8';
+$metadataLanguage = defined('LANGUAGE') ? strtoupper(substr((string) LANGUAGE, 0, 2)) : 'EN';
+$metadataFile = __DIR__ . '/languages/' . preg_replace('/[^A-Z]/', '', $metadataLanguage) . '.php';
+if (!is_file($metadataFile)) $metadataFile = __DIR__ . '/languages/EN.php';
+$MF = array();
+require $metadataFile;
+$module_name = 'MiniForm';
+$module_function = 'page';
+$module_version='0.23.16';
+$module_platform = '1.7.0';
+$module_author = 'Ruud / Dev4me';
+$module_license = 'GNU General Public License';
+$module_description = 'Erstellt und verwaltet kompakte Formulare einschließlich Nachrichten, Dateiuploads und E-Mail-Versand.';
+$module_requires_php = '8.2.0';
+
+if(defined('WBCE_VERSION')){
+	// Additional vars for WBCE CMS complementing the Page Module with AdminTool functionality
+	$module_function = 'page, tool';
+	$tool_name = isset($MF['TOOL_NAME']) ? $MF['TOOL_NAME'] : 'MiniForm Overview';
+	$tool_description = isset($MF['TOOL_DESCRIPTION']) ? $MF['TOOL_DESCRIPTION'] : 'View Settings and Entries of all MiniForm Sections.';
+}

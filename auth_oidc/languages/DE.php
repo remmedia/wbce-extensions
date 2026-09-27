@@ -1,0 +1,2 @@
+<?php
+return array('title' => 'OpenID Connect', 'description' => 'Anmeldung über einen OpenID-Connect-Identitätsanbieter.', 'save' => 'Einstellungen speichern', 'saved' => 'Einstellungen gespeichert.', 'failed' => 'Speichern fehlgeschlagen.', 'enabled' => 'Provider aktivieren', 'scope' => 'Freigabe', 'scope_all' => 'Für alle Benutzer', 'scope_users' => 'Nur freigegebene Benutzer', 'scope_disabled' => 'Deaktiviert', 'field_issuer' => 'Issuer-URL', 'field_client_id' => 'Client-ID', 'field_client_secret' => 'Client-Secret', 'field_redirect_uri' => 'Weiterleitungs-URL');

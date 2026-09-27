@@ -1,0 +1,11 @@
+.store-update-row>div>strong{display:block;margin-bottom:.3rem}
+.store-update-row>div>small{display:block;font-weight:400}
+.store-install-feedback,.store-update-install-state{display:grid;gap:.35rem;min-width:min(22rem,100%);font-weight:600}
+.store-update-install-state{flex:0 1 22rem;margin-left:auto;text-align:right}
+.store-install-progress{display:block;width:100%;min-width:12rem;height:16px;accent-color:#2271b1}
+.store-dashboard-single-update-form{display:grid;justify-items:end;min-width:0;margin-left:auto}
+.store-dashboard-single-update-form .store-install-feedback{width:min(22rem,100%);margin:0;text-align:right}
+.store-dashboard-single-update-form .store-update-install-state{width:auto;min-width:0;margin:0;text-align:right;justify-items:end}
+.store-dashboard-single-update-form .store-update-install-state .store-install-progress{width:8rem;min-width:0}
+.store-dashboard-bulk-info{margin-right:auto;font-weight:600}
+@media(max-width:620px){.store-dashboard-single-update-form,.store-dashboard-single-update-form .store-install-feedback{width:100%;justify-items:stretch;text-align:left}.store-install-progress{min-width:0}}

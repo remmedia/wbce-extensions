@@ -1,0 +1,14 @@
+/* Visual styling is supplied by the active admin template. */
+.totp-preferences-card{display:grid;grid-template-columns:3.5rem minmax(0,1fr) auto;align-items:center;gap:1rem;margin:1.25rem 0}
+.totp-preferences-icon{display:grid;place-items:center;width:3.5rem;height:3.5rem;font-size:1.55rem}
+.totp-preferences-heading{display:flex;align-items:center;flex-wrap:wrap;gap:.65rem;margin-bottom:.35rem}
+.totp-preferences-heading h2,.totp-preferences-content p{margin:0}.totp-preferences-action{white-space:nowrap}
+.totp-profile{box-sizing:border-box;display:grid;width:100%;max-width:none;margin:0;gap:1rem}.totp-profile *{box-sizing:border-box}
+.totp-profile-intro{display:flex;align-items:center;gap:.75rem;margin:0 0 1rem}.totp-profile-intro p{margin:0}
+.totp-panel{width:100%;margin:0}.totp-panel h3{margin-top:0}.totp-form{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:1rem;max-width:none}.totp-form>h3,.totp-form>p{grid-column:1/-1}
+.totp-field{display:block;width:100%;min-width:0;margin:0}.totp-field label{display:block;margin:0 0 .35rem;font-weight:700;text-align:left}
+.totp-field input{box-sizing:border-box;display:block;float:none;width:100%;max-width:none;min-height:2.75rem;margin:0}.totp-code-field input,.totp-field input[autocomplete="one-time-code"]{width:11rem;max-width:100%;min-height:3.6rem;font-size:1.45rem;line-height:1;text-align:center;letter-spacing:.22em}
+.totp-active-status{display:flex;align-items:center;gap:.8rem;margin-bottom:1.15rem}.totp-active-status small{display:block;margin-top:.15rem}
+.totp-action-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;align-items:start}
+.totp-back-link{margin:1rem 0}.totp-profile #totp-qrcode{display:inline-block;max-width:18rem;overflow:auto;padding:12px;margin:0 0 1rem;background:#fff;border:1px solid var(--wbce-admin-border,#d7dce2);border-radius:var(--wbce-admin-radius,8px)}.totp-profile #totp-qrcode img,.totp-profile #totp-qrcode canvas{display:block;max-width:100%;height:auto}.totp-profile .totp-backup-page{max-width:none}.totp-backup-page .warning{padding:1rem;margin:1rem 0}.totp-backup-codes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem 2rem;padding:1rem 1rem 1rem 3rem}.totp-backup-codes code{font-size:1.05rem;font-weight:700;letter-spacing:.06em}
+@media(max-width:700px){.totp-preferences-card{grid-template-columns:3.25rem minmax(0,1fr)}.totp-preferences-action{grid-column:1/-1}.totp-preferences-action .button{display:flex;width:100%}.totp-action-grid,.totp-form{grid-template-columns:1fr}.totp-form button{justify-self:start}}@media(max-width:600px){.totp-backup-codes{grid-template-columns:1fr}}

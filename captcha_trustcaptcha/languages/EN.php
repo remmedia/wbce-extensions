@@ -1,0 +1,3 @@
+<?php
+$CAPTCHA_PRECHECK_LABEL='Hook interfaces';
+$CAPTCHA_PROVIDER=array('name'=>'TrustCaptcha','description'=>'Privacy-oriented European CAPTCHA service with an accessible widget.','configure'=>'Configure TrustCaptcha','sitekey'=>'Site key','api_key'=>'API key','keep_secret'=>'Leave empty to keep the existing key','stored'=>'API key stored','score'=>'Maximum permitted risk score','theme'=>'Appearance','light'=>'Light','dark'=>'Dark','minimal'=>'Minimal data mode','not_configured'=>'TrustCaptcha is not fully configured yet.','registration_failed'=>'The TrustCaptcha add-on registration failed.','hooks_required'=>'WBCE 1.7 hook API or WBCE Hook Bridge 1.2.0','available'=>'Available','unavailable'=>'Unavailable');

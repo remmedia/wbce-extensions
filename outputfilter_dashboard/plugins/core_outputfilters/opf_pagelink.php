@@ -1,0 +1,66 @@
+<?php
+/**
+ * WBCE CMS
+ * Way Better Content Editing.
+ * Visit https://wbce.org to learn more and to join the community.
+ *
+ * @copyright       Ryan Djurovich (2004-2009)
+ * @copyright       WebsiteBaker Org. e.V. (2009-2015)
+ * @copyright       WBCE Project (2015-)
+ * @category        opffilter
+ * @package         OPF Internal Link Replacer
+ * @version         1.0.7
+ * @authors         Martin Hecht (mrbaseman)
+ * @link            https://forum.wbce.org/viewtopic.php?id=176
+ * @license         GNU GPL2 (or any later version)
+ * @platform        WBCE 1.2.x
+ * @requirements    OutputFilter Dashboard 1.5.x and PHP 5.4 or higher
+ *
+ **/
+
+
+/* -------------------------------------------------------- */
+// Must include code to stop this file being accessed directly
+if(!defined('WB_PATH')) {
+        // Stop this file being access directly
+        if(!headers_sent()) header("Location: ../index.php",TRUE,301);
+        die('<head><title>Access denied</title></head><body><h2 style="color:red;margin:3em auto;text-align:center;">Cannot access this file directly</h2></body></html>');
+}
+/* -------------------------------------------------------- */
+
+
+
+/*
+ * replace all "[wblink{page_id}]" (deprecated), "[pagelink:NN]" and
+ * "[<module>:NN]" tokens with real links — see framework/LinkResolver.php
+ */
+
+function opff_mod_opf_pagelink(&$content, $page_id, $section_id, $module, $wb)
+{
+    if (!class_exists('Settings') || Settings::Get('opf_pagelink', true)) {
+        // Do not invoke an unrelated autoloader before the core resolver has
+        // been loaded. Some older installations register one that throws.
+        if (!class_exists('LinkResolver', false)) {
+            $resolverFile = WB_PATH . '/framework/LinkResolver.php';
+            if (is_file($resolverFile)) {
+                require_once $resolverFile;
+            }
+        }
+
+        if (class_exists('LinkResolver', false)) {
+            $content = LinkResolver::resolveContent($content);
+        } elseif (function_exists('page_link')) {
+            // WBCE 1.6.8 has no LinkResolver class. Resolve the two core page
+            // token formats locally and leave module-specific tokens intact.
+            $content = preg_replace_callback(
+                '/\[(?:wblink|pagelink:)([0-9]+)\]/i',
+                static function ($matches) {
+                    $url = page_link((int) $matches[1]);
+                    return is_string($url) && $url !== '' ? $url : $matches[0];
+                },
+                $content
+            );
+        }
+    }
+    return true;
+}

@@ -1,0 +1,25 @@
+<div class="opf-app">
+    <header class="opf-hero">
+        <div><h2>{{ TOOL_NAME }}</h2><p>{{ L_('L:TXT_DASHBOARD_INTRO') }}</p></div>
+        <div class="opf-hero-links">
+            <a href="{{ ADDON_URL }}/docs/index.html" target="_blank" rel="noopener" title="{{ L_('L:TXT_HELP_BROWSER') }}"><i class="fa fa-question-circle"></i> {{ L_('L:TXT_HELP') }}</a>
+            <button type="button" class="opf-hero-link" data-opf-dialog="opf-about-dialog" title="{{ L_('L:TXT_ABOUT') }}"><i class="fa fa-info-circle"></i> {{ L_('L:TXT_ABOUT') }}</button>
+        </div>
+    </header>
+    {% if data.author %}<div class="opf-modified">{{ L_('MESSAGE:PAGES_LAST_MODIFIED') }} <strong>{{ data.author.name }}</strong>{% if data.modified_time %}, {{ data.modified_date }} - {{ data.modified_time }}{% endif %}</div>{% endif %}
+    {% if TABS %}<nav><ul class="opf-tabs">{% for tab in TABS|reverse %}<li {{ tab.li_class }}><a class="tab{{ tab.a_class }}" href="{{ tab.pos }}"><i class="fa fa-fw fa-{{ tab.icon }}"></i> {{ L_(tab.link_name) }}</a></li>{% endfor %}</ul></nav>{% endif %}
+    <main class="opf-content">
+        {{ MESSAGE_BOX }}
+        <noscript><div class="opf-warning">{{ L_('L:TXT_ACTIVATE_JS') }}</div></noscript>
+        {% block content %}{% endblock %}
+    </main>
+    <dialog id="opf-about-dialog" class="opf-about-dialog">
+        <form method="dialog"><button class="opf-dialog-close" aria-label="{{ L_('TEXT:CLOSE') }}" title="{{ L_('TEXT:CLOSE') }}">&times;</button></form>
+        <span class="opf-detail-icon"><i class="fa fa-magic" aria-hidden="true"></i></span>
+        <h2>Output Filter Dashboard</h2>
+        <p>{{ L_('L:TXT_ABOUT_DESCRIPTION') }}</p>
+        <p><strong>Version {{ MODULE_VERSION }}</strong></p>
+        <p><a href="https://github.com/mrbaseman/outputfilter_dashboard" target="_blank" rel="noopener">{{ L_('L:TXT_PROJECT_PAGE') }}</a></p>
+        <form method="dialog"><button class="button" type="submit">{{ L_('TEXT:CLOSE') }}</button></form>
+    </dialog>
+</div>

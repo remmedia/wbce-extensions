@@ -1,0 +1,115 @@
+<?php
+/**
+ *
+ * @category        admintool
+ * @package         wbstats
+ * @author          Ruud Eisinga - dev4me.com
+ * @link			https://dev4me.com/
+ * @license         http://www.gnu.org/licenses/gpl.html
+ * @platform        WebsiteBaker 2.8.x / WBCE 1.4
+ * @requirements    PHP 7 and higher
+ * @version         0.2.5.9
+ * @lastmodified    May 29, 2026
+ *
+ */
+
+
+$WS = array();
+require __DIR__.'/languages/EN.php';
+$wbstatsLanguage = defined('LANGUAGE') ? __DIR__.'/languages/'.strtoupper((string) LANGUAGE).'.php' : '';
+if ($wbstatsLanguage !== '' && is_file($wbstatsLanguage)) { require $wbstatsLanguage; }
+$module_directory = 'wbstats';
+$module_uuid = '9f65a191-8b3b-41df-b267-198b2e6676f2';
+$module_name = 'Besucherstatistik';
+$module_name = isset($WS['MODULE_NAME']) ? $WS['MODULE_NAME'] : $module_name;
+$module_version = '0.2.8.5';
+$module_function = 'tool';
+$module_platform = '2.8';
+if(defined('WBCE_VERSION')) {
+	$module_function = 'tool,initialize,page';
+	$module_platform = '1.6.8';
+}
+$module_requires_php = '8.2.0';
+$module_author = 'Dev4me - Ruud Eisinga - www.dev4me.nl, Norbert Heimsath(heimsath.org)';
+$module_license = 'GNU General Public License';
+$module_description = 'Zeigt Besuche, Seitenaufrufe, Herkunft, Kampagnen und weitere Website-Statistiken in einem Admin-Werkzeug.';
+$module_description = isset($WS['MODULE_DESCRIPTION']) ? $WS['MODULE_DESCRIPTION'] : $module_description;
+$module_icon = 'fa fa-bar-chart';
+
+/**
+ * Version history
+ *
+ * 0.2.5.9
+ * - fixed E_DEPRECATED warning on PHP8.5
+ * - added countries counter in visitors page
+ * - small css changes
+ *
+ * 0.2.5.8
+ * - bugfix for storing citynames with apostrophes (like 's-Gravenhage)
+ * - storing extra available info about IP address
+ *
+ * 0.2.5.7
+ * - fixed small issue after upgrading previous version
+ * - prevent error in case of ip location service not responding.
+ *
+ * 0.2.5.6
+ * - using new IP location service. geoplugin.net is no longer free to use
+ * - small fix for ignoring IPv6 adresses
+ *
+ * 0.2.5.5
+ * - fix for testing emtpy referer generating php8 error (class.count.php)
+ * - set timeout for location lookups. 
+ *
+ * 0.2.5.4
+ * - fix for using the frontend wbstats-viewer
+ * - fix referer_host error in php8
+ *
+ * 0.2.5.3
+ * - some more fixes in install.php and upgrade.php for the older MySQL 5.7
+ *
+ * 0.2.5.2
+ * - fixes in install.php and upgrade.php for the older MySQL 5.7
+ *
+ * 0.2.5.1
+ * - fixed security issue
+ *
+ * 0.2.5
+ * - showing 404 status when recent 404 module is used
+ * - better bot detection (calls without browser language are fake and not counted)
+ * - improved logbook history
+ * - added UTM campaign recording
+ * - added GCLID and FBCLID detection (logged as campaign data)
+ * - fixed issue with viewing searchkeys
+ * - fixed issue mysql 5.7+ (setting ONLY_FULL_GROUP_BY)
+ * - fixed several php 8.1 "deprecated" issues
+ *
+ * 0.2.4
+ * - fixed updgrade.php for MySQL-Strict / Doctrine
+ * - fixed table cleanup routines
+ * - added  logbook visitory history
+ *
+ * 0.2.3
+ * - added the option to ignore specified IP adressess
+ *
+ * 0.2.2
+ * - fixed small bug in upgrade script when used in complete CMS upgrades
+ * - fixed bug showing current online
+ * - extra page with live visitor view
+ * - Detect local search keywords
+ *
+ * 0.2.1
+ *	- added frontend view for WBCE
+ *
+ * 0.2.0
+ *	- added entrypages, exitpages, time/pages cloud
+ *
+ * 0.1.12.3
+ *	- Update module_platform 
+ *
+ * 0.1.12.2
+ *	- Add Admintool Icon
+ *
+ * 0.1.12.1
+ *	- Initialize.php for wbstats
+ *
+ **/

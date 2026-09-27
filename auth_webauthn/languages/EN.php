@@ -1,0 +1,2 @@
+<?php
+return array('title' => 'Passkey-Anmeldung', 'description' => 'Passkeys und Sicherheitsschlüssel für die primäre Anmeldung.', 'save' => 'Save settings', 'saved' => 'Settings saved.', 'failed' => 'Saving failed.', 'enabled' => 'Enable provider', 'scope' => 'Availability', 'scope_all' => 'All users', 'scope_users' => 'Granted users only', 'scope_disabled' => 'Disabled', 'field_rp_id' => 'Relying-Party-ID', 'field_user_verification' => 'Benutzerprüfung');

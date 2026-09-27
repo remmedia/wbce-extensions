@@ -1,0 +1,2 @@
+<?php
+defined('WB_PATH')or die('No direct access');$core=WB_PATH.'/modules/mailer/src/MailerRegistry.php';if(is_file($core))require_once $core;if(!class_exists('WbceMailerRegistry')||!function_exists('wbce_add_filter'))return;wbce_add_filter('mailer.providers',static function($providers){$providers['postmark']=['name'=>'Postmark','description'=>'Transaktionaler Versand über die Postmark-API.','module'=>'mailer_postmark','send'=>static fn($message,$settings)=>['handled'=>false]];return $providers;});

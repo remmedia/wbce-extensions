@@ -1,0 +1,32 @@
+(function ($) {
+    'use strict';
+    function securityData() { var data = {}, input = document.querySelector('#outputfilter input[type="hidden"][name="formtoken"]') || document.querySelector('#outputfilter input[type="hidden"][name^="_ftan"]') || document.querySelector('#outputfilter input[type="hidden"][name*="ftan" i]'); if (input) data[input.name] = input.value; return data; }
+    function notice(message, success) { var box = $('<div class="opf-toast" role="status" aria-live="polite"></div>').addClass(success ? 'is-success' : 'is-error').text(message).appendTo(document.body); setTimeout(function(){box.addClass('is-visible');},10); setTimeout(function(){box.removeClass('is-visible');setTimeout(function(){box.remove();},220);},4200); }
+    function refreshToken(response) { var input, token; if (!response || !response.ftan) return; input = document.querySelector('#outputfilter input[type="hidden"][name="formtoken"]') || document.querySelector('#outputfilter input[type="hidden"][name^="_ftan"]') || document.querySelector('#outputfilter input[type="hidden"][name*="ftan" i]'); if (!input) return; token = $('<textarea/>').html(response.ftan).text(); if (token.indexOf('=') > 0) { input.name = token.split('=')[0]; input.value = token.substring(token.indexOf('=') + 1); } else { input.value = token; } }
+    function request(url, data, control) { var payload = $.extend({}, securityData(), data), call; if(control) $(control).prop('disabled',true).addClass('is-busy').attr('aria-busy','true'); call=$.ajax({url:url,type:'POST',dataType:'json',data:payload}); call.done(refreshToken).fail(function(xhr){refreshToken(xhr.responseJSON);}).always(function(){if(control) $(control).prop('disabled',false).removeClass('is-busy').removeAttr('aria-busy');}); return call; }
+    function fail(xhr){notice((xhr.responseJSON&&xhr.responseJSON.message)||'HTTP '+xhr.status,false);}
+    function confirmDelete(link,row){
+        var dialog=document.getElementById('opf-delete-dialog');
+        if(!dialog){dialog=document.createElement('dialog');dialog.id='opf-delete-dialog';dialog.className='opf-dialog';dialog.innerHTML='<p class="opf-dialog-message"></p><div class="opf-dialog-actions"><button type="button" class="opf-cancel"></button><button type="button" class="opf-confirm"></button></div>';document.body.appendChild(dialog);}
+        dialog.querySelector('.opf-dialog-message').textContent=String(link.data('question')||'').replace('%s',$.trim(row.find('.opf-filter-name span').text()));
+        dialog.querySelector('.opf-cancel').textContent=link.data('cancel'); dialog.querySelector('.opf-confirm').textContent=link.data('delete');
+        $(dialog).off('click.opf').on('click.opf','.opf-cancel',function(){dialog.close();}).on('click.opf','.opf-confirm',function(){var button=this;request(AJAX_PLUGINS+'/ajax_delete_row.php',{purpose:'delete_row',idkey:String(row.data('idkey')).replace('id_','')},button).done(function(r){if(!r.success){notice(r.message,false);return;}dialog.close();row.fadeOut(220,function(){row.remove();});notice(r.message,true);}).fail(fail);});
+        if(typeof dialog.showModal==='function') dialog.showModal(); else dialog.setAttribute('open','open');
+    }
+    function confirmConvert(link,row){
+        var dialog=document.getElementById('opf-convert-dialog');
+        if(!dialog){dialog=document.createElement('dialog');dialog.id='opf-convert-dialog';dialog.className='opf-dialog';dialog.innerHTML='<p class="opf-dialog-message"></p><div class="opf-dialog-actions"><button type="button" class="opf-cancel"></button><button type="button" class="opf-confirm"></button></div>';document.body.appendChild(dialog);}
+        dialog.querySelector('.opf-dialog-message').textContent=String(link.data('question')||'');
+        dialog.querySelector('.opf-cancel').textContent=link.data('cancel'); dialog.querySelector('.opf-confirm').textContent=link.data('confirm');
+        $(dialog).off('click.opf').on('click.opf','.opf-cancel',function(){dialog.close();}).on('click.opf','.opf-confirm',function(){var button=this;request(AJAX_PLUGINS+'/ajax_convert.php',{purpose:'convert_filter',idkey:String(row.data('idkey')).replace('id_','')},button).done(function(r){if(!r.success){notice(r.message,false);return;}dialog.close();var icon=link.find('i');icon.attr('class',r.type==='plugin'?'fa fa-plug circle-icon':'fa fa-code circle-icon');notice(r.message,true);}).fail(fail);});
+        if(typeof dialog.showModal==='function') dialog.showModal(); else dialog.setAttribute('open','open');
+    }
+    $(function(){
+        $('.dragdrop_item').addClass('dragdrop_handle');
+        if($.fn.sortable){$('.dragdrop_form tbody').has('tr.opf-filter-card').sortable({appendTo:document.body,helper:function(e,row){var original=row.children(),clone=row.clone();clone.children().each(function(i){$(this).width(original.eq(i).outerWidth());});return clone;},handle:'.dragdrop_handle',opacity:.88,cursor:'grabbing',distance:4,items:'tr.opf-filter-card',dropOnEmpty:false,placeholder:'opf-sort-placeholder',forcePlaceholderSize:true,update:function(){var body=this, data={action:'updatePosition',id:[]};$(body).find('tr.opf-filter-card').each(function(){data.id.push(String($(this).data('idkey')).replace('id_',''));});$(body).addClass('is-saving').attr('aria-busy','true');request(AJAX_PLUGINS+'/ajax_dragdrop.php',data).done(function(r){notice(r.message,!!r.success);}).fail(fail).always(function(){$(body).removeClass('is-saving').removeAttr('aria-busy');});}}).disableSelection();}
+        else{notice('Die Sortierfunktion konnte nicht geladen werden.',false);}
+        $('.status [type=checkbox]').on('change',function(){var checkbox=this,row=$('#'+this.id.replace('switch_','')),state=$(this).is(':checked')?1:0;request(AJAX_PLUGINS+'/ajax_toggle_state.php',{purpose:'toggle_status',action:state,idkey:String(row.data('idkey')).replace('id_','')},checkbox).done(function(r){if(!r.success){checkbox.checked=!checkbox.checked;notice(r.message,false);return;}row.toggleClass('active',!!state).toggleClass('inactive',!state);notice(r.message,true);}).fail(function(xhr){checkbox.checked=!checkbox.checked;fail(xhr);});});
+        $(document).on('click','.delete-item',function(e){e.preventDefault();confirmDelete($(this),$(this).closest('tr'));});
+        $(document).on('click','.convert-item',function(e){e.preventDefault();confirmConvert($(this),$(this).closest('tr'));});
+    });
+}(jQuery));

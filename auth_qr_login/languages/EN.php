@@ -1,0 +1,2 @@
+<?php
+return array('title' => 'QR-Code-Anmeldung', 'description' => 'Anmeldung durch eine bestätigte QR-Code-Sitzung.', 'save' => 'Save settings', 'saved' => 'Settings saved.', 'failed' => 'Saving failed.', 'enabled' => 'Enable provider', 'scope' => 'Availability', 'scope_all' => 'All users', 'scope_users' => 'Granted users only', 'scope_disabled' => 'Disabled', 'field_expires_minutes' => 'Gültigkeit in Minuten', 'field_approval_url' => 'Freigabe-URL');

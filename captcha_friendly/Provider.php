@@ -1,0 +1,15 @@
+<?php
+final class WbceFriendlyCaptchaProvider
+{
+    public static function render(array $context)
+    {
+        $site=trim((string)Settings::Get('captcha_friendly_sitekey',''));
+        $key=trim((string)Settings::Get('captcha_friendly_apikey',''));
+        if($site===''||$key===''){$text=WbceCaptchaProviderUi::language(__DIR__,array('not_configured'=>'Friendly Captcha is not fully configured yet.'));return '<p class="warning">'.self::e($text['not_configured']).'</p>';}
+        $theme=(string)Settings::Get('captcha_friendly_theme','auto');$start=(string)Settings::Get('captcha_friendly_start','auto');$region=(string)Settings::Get('captcha_friendly_endpoint','eu');
+        return '<div class="frc-captcha" data-sitekey="'.self::e($site).'" data-api-endpoint="'.self::e($region).'" data-theme="'.self::e($theme).'" data-start="'.self::e($start).'"></div><script type="module" src="https://cdn.jsdelivr.net/npm/@friendlycaptcha/sdk@0.1.31/site.min.js" async defer></script>';
+    }
+    public static function verify($input,array $context){$request=isset($context['request'])&&is_array($context['request'])?$context['request']:array();$rawToken=$request['frc-captcha-response']??'';if(!is_scalar($rawToken))return false;$token=trim((string)$rawToken);$key=trim((string)Settings::Get('captcha_friendly_apikey',''));$site=trim((string)Settings::Get('captcha_friendly_sitekey',''));if($token===''||strlen($token)>16384||$key===''||$site==='')return false;$base=(string)Settings::Get('captcha_friendly_endpoint','eu')==='global'?'https://global.frcapi.com':'https://eu.frcapi.com';$result=self::postJson($base.'/api/v2/captcha/siteverify',array('response'=>$token,'sitekey'=>$site),array('X-API-Key: '.$key));return is_array($result)&&!empty($result['success']);}
+    private static function postJson($url,array $payload,array $headers){$headers[]='Content-Type: application/json';$headers[]='Accept: application/json';$encoded=json_encode($payload);if(!is_string($encoded))return null;$raw=false;if(function_exists('curl_init')){$curl=curl_init($url);if($curl!==false){curl_setopt_array($curl,array(CURLOPT_POST=>true,CURLOPT_POSTFIELDS=>$encoded,CURLOPT_HTTPHEADER=>$headers,CURLOPT_RETURNTRANSFER=>true,CURLOPT_CONNECTTIMEOUT=>4,CURLOPT_TIMEOUT=>10,CURLOPT_FOLLOWLOCATION=>false,CURLOPT_PROTOCOLS=>CURLPROTO_HTTPS));$raw=curl_exec($curl);$status=(int)curl_getinfo($curl,CURLINFO_RESPONSE_CODE);if(!is_string($raw)||$status<200||$status>=300||strlen($raw)>65536)$raw=false;if(PHP_VERSION_ID<80500)curl_close($curl);}}if($raw===false&&filter_var(ini_get('allow_url_fopen'),FILTER_VALIDATE_BOOLEAN)){$options=array('http'=>array('method'=>'POST','timeout'=>10,'ignore_errors'=>false,'follow_location'=>0,'max_redirects'=>0,'header'=>implode("\r\n",$headers),'content'=>$encoded),'ssl'=>array('verify_peer'=>true,'verify_peer_name'=>true));$raw=@file_get_contents($url,false,stream_context_create($options),0,65537);}if(!is_string($raw)||strlen($raw)>65536)return null;$decoded=json_decode($raw,true);return is_array($decoded)?$decoded:null;}
+    private static function e($value){return htmlspecialchars((string)$value,ENT_QUOTES,'UTF-8');}
+}

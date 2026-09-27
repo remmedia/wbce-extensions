@@ -1,0 +1,2 @@
+<?php
+return array('title' => 'SAML 2.0', 'description' => 'Anmeldung über einen SAML-2.0-Identitätsanbieter.', 'save' => 'Save settings', 'saved' => 'Settings saved.', 'failed' => 'Saving failed.', 'enabled' => 'Enable provider', 'scope' => 'Availability', 'scope_all' => 'All users', 'scope_users' => 'Granted users only', 'scope_disabled' => 'Disabled', 'field_entity_id' => 'Service-Provider-Entity-ID', 'field_sso_url' => 'Identity-Provider-SSO-URL', 'field_idp_certificate' => 'Identity-Provider-Zertifikat');

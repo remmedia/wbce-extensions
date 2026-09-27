@@ -1,0 +1,14 @@
+.at-live-status{height:4px;margin-top:20px;border-radius:4px;overflow:hidden}
+.at-card.at-saving .at-live-status{background:linear-gradient(90deg,transparent,var(--wbce-admin-primary,currentColor),transparent);background-size:200% 100%;animation:at-saving 1s linear infinite}
+@keyframes at-saving{to{background-position:-200% 0}}
+.at-placement-row{display:flex;align-items:stretch;flex-wrap:wrap;gap:14px;margin-bottom:18px}
+.at-placement-row .at-placement{box-sizing:border-box;display:flex;flex:0 0 205px;flex-direction:column;width:205px;height:205px;margin:0;padding:10px;border:1px solid var(--wbce-admin-border,currentColor);border-radius:var(--wbce-admin-radius,10px)}
+.at-placement legend{display:flex;align-items:flex-end;min-height:2.5em;padding:0 6px;font-size:.92rem;font-weight:700;line-height:1.2}
+.at-placement-grid{position:relative;box-sizing:border-box;display:grid;width:132px;height:132px;margin:auto;grid-template:repeat(3,1fr)/repeat(3,1fr);align-self:center;gap:4px;padding:6px;border:2px solid var(--wbce-admin-border,currentColor);border-radius:9px;background:var(--wbce-admin-surface,Canvas)}
+.at-place{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0;cursor:pointer}
+.at-place input{position:absolute;opacity:0}.at-place span{width:20px;height:20px;border:2px solid var(--wbce-admin-border,currentColor);border-radius:50%;background:var(--wbce-admin-surface,Canvas);transition:.18s}
+.at-place input:checked+span{border:6px solid var(--wbce-admin-primary,currentColor);background:var(--wbce-admin-surface,Canvas)}.at-place input:focus-visible+span{outline:3px solid var(--wbce-admin-primary,currentColor);outline-offset:2px}
+.at-place b{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.at-place-top_left{grid-area:1/1}.at-place-top{grid-area:1/2}.at-place-top_right{grid-area:1/3}.at-place-left{grid-area:2/1}.at-place-right{grid-area:2/3}.at-place-bottom_left{grid-area:3/1}.at-place-bottom{grid-area:3/2}.at-place-bottom_right{grid-area:3/3}
+.at-placement-grid:after{content:"";grid-area:2/2;border:1px dashed var(--wbce-admin-border,currentColor);border-radius:6px;background:var(--wbce-admin-surface,Canvas);pointer-events:none}
+@media(max-width:540px){.at-placement-row{align-items:flex-start}.at-placement-row .at-placement{flex-basis:205px;max-width:100%}}

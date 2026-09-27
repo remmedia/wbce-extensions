@@ -1,0 +1,4 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^([a-z][a-z0-9_-]*)(?:/(.*))?/?$ index.php?api=$1&path=$2 [QSA,L,NC]
+</IfModule>

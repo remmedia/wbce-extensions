@@ -1,0 +1,2 @@
+<?php
+return array('title' => 'IMAP-Anmeldung', 'description' => 'Anmeldung gegen einen IMAP-Mailserver.', 'save' => 'Save settings', 'saved' => 'Settings saved.', 'failed' => 'Saving failed.', 'enabled' => 'Enable provider', 'scope' => 'Availability', 'scope_all' => 'All users', 'scope_users' => 'Granted users only', 'scope_disabled' => 'Disabled', 'field_host' => 'IMAP-Server', 'field_port' => 'Port', 'field_encryption' => 'Verschlüsselung', 'field_mailbox' => 'Postfach');

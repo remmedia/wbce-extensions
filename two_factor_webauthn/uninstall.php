@@ -1,0 +1,2 @@
+<?php
+defined('WB_PATH') or die('No direct access');if(is_file(WB_PATH.'/modules/two_factor/Registry.php')){require_once WB_PATH.'/modules/two_factor/Registry.php';WbceTwoFactorRegistry::assertCanUninstall('webauthn',$database);}if(is_file(WB_PATH.'/modules/two_factor/Settings.php')){require_once WB_PATH.'/modules/two_factor/Settings.php';WbceTwoFactorSettings::removeProviderData($database,'webauthn');}$database->query('DROP TABLE IF EXISTS `{TP}mod_two_factor_webauthn_credentials`');$database->query('DROP TABLE IF EXISTS `{TP}mod_two_factor_webauthn_settings`');

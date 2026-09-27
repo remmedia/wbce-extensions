@@ -1,0 +1,239 @@
+<?php
+
+/*
+upload.php
+*/
+
+/**
+ *
+ * @category        tool
+ * @package         Outputfilter Dashboard
+ * @version         1.6.3
+ * @authors         Thomas "thorn" Hornik <thorn@nettest.thekk.de>, Christian M. Stefan (Stefek) <stefek@designthings.de>, Martin Hecht (mrbaseman) <mrbaseman@gmx.de>
+ * @copyright       (c) 2009,2010 Thomas "thorn" Hornik, 2010-2023 Christian M. Stefan (Stefek), 2016-2023 Martin Hecht (mrbaseman)
+ * @link            https://github.com/mrbaseman/outputfilter_dashboard
+ * @link            https://addons.wbce.org/pages/addons.php?do=item&item=53
+ * @link            https://forum.wbce.org/viewtopic.php?id=176
+ * @license         GNU General Public License, Version 3
+ * @platform        WBCE 1.x
+ * @requirements    PHP 7.4 - 8.2
+ *
+ * This file is part of OutputFilter-Dashboard, a module for WBCE and Website Baker CMS.
+ *
+ * OutputFilter-Dashboard is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OutputFilter-Dashboard is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OutputFilter-Dashboard. If not, see <http://www.gnu.org/licenses/>.
+ *
+ **/
+
+
+// This file will be included from tool.php
+
+
+// prevent this file from being accessed directly
+if(!defined('WB_PATH')) die(header('Location: ../index.php'));
+
+// obtain module directory
+$mod_dir = basename(dirname(__FILE__));
+require(WB_PATH.'/modules/'.$mod_dir.'/info.php');
+
+// include module.functions.php
+include_once(WB_PATH . '/framework/module.functions.php');
+
+// include the module language file depending on the backend language of the current user
+if (!include(get_module_language_file($mod_dir))) return;
+
+// load outputfilter-functions
+require_once(dirname(__FILE__).'/functions.php');
+
+// check if user is allowed to use admin-tools (to prevent this file to be called by an unauthorized user e.g. from a code-section)
+if(!$admin->get_permission('admintools')) die(header('Location: ../../index.php'));
+
+$upload_ok = FALSE;
+
+// check for uploaded plugin
+$upload_result = opf_upload_check('filterplugin', '.zip', 'zip');
+if(!is_array($upload_result)) {
+    $upload_message = $LANG['MOD_OPF']['TXT_UPLOAD_FAILED'];
+    return;
+}
+if(!$upload_result['status']) {
+    $upload_message = $upload_result['result'];
+    return;
+}
+$upload_id = $upload_result['result'];
+
+if (file_exists (WB_PATH.'/include/pclzip/pclzip.lib.php'))
+   require_once(WB_PATH.'/include/pclzip/pclzip.lib.php');
+
+$temp_dir = WB_PATH.MEDIA_DIRECTORY.'/opf_plugins/';
+if(is_dir(WB_PATH.'/temp')){
+    $temp_dir = WB_PATH.'/temp/opf_plugins/';
+}
+if(!is_dir($temp_dir)) 
+    opf_io_mkdir($temp_dir);
+
+$tempToken = function_exists('random_bytes') ? bin2hex(random_bytes(12)) : str_replace('.', '', uniqid('', true));
+$temp_file    = 'opf_upload_'.$tempToken.'.zip';
+$temp_unzip   = $temp_dir.'opf_unzip_'.$tempToken.'/';
+$install_file = 'plugin_install.php';
+$info_file    = 'plugin_info.php';
+$install_dir  = dirname(__FILE__).'/plugins/';
+
+$text_failed = $LANG['MOD_OPF']['TXT_FAILED_TO_UPLOAD'];
+
+// check write permissions
+if(!is_writable($install_dir)) {
+    $upload_message = sprintf($text_failed, $LANG['MOD_OPF']['TXT_DIR_WRITE_FAILED']);
+    return;
+}
+
+// Try to move uploaded plugin to temp
+if(!opf_upload_move($upload_id, $temp_dir, $temp_file)) {
+    $upload_message = sprintf($text_failed, $LANG['MOD_OPF']['TXT_UPLOAD_FAILED']);
+    return;
+}
+
+// make temp dir
+opf_io_mkdir($temp_unzip);
+
+// Setup PclZip and check if zip-file contains a plugin
+$archive = new PclZip($temp_dir.$temp_file);
+$archiveEntries = $archive->listContent();
+$archiveSize = 0;
+if (!is_array($archiveEntries) || count($archiveEntries) === 0 || count($archiveEntries) > 2000) {
+    $upload_message = sprintf($text_failed, $LANG['MOD_OPF']['TXT_ARCHIVE_INVALID']);
+    @unlink($temp_dir.$temp_file);
+    return;
+}
+foreach ($archiveEntries as $archiveEntry) {
+    $archiveName = isset($archiveEntry['filename']) ? str_replace('\\', '/', (string) $archiveEntry['filename']) : '';
+    $archiveSize += isset($archiveEntry['size']) ? max(0, (int) $archiveEntry['size']) : 0;
+    if ($archiveName === '' || strpos($archiveName, "\0") !== false || $archiveName[0] === '/'
+        || preg_match('~(^|/)\.\.(/|$)~', $archiveName) || preg_match('~^[A-Za-z]:/~', $archiveName)
+        || $archiveSize > 268435456) {
+        $upload_message = sprintf($text_failed, $LANG['MOD_OPF']['TXT_ARCHIVE_INVALID']);
+        @unlink($temp_dir.$temp_file);
+        return;
+    }
+}
+$list = $archive->extract(PCLZIP_OPT_PATH, $temp_unzip);
+if(!$list || !opf_io_validate_tree($temp_unzip) || !file_exists($temp_unzip.$info_file)) {
+    $upload_message = sprintf($text_failed, $LANG['MOD_OPF']['TXT_NOT_A_FILTER']);
+    if (file_exists($temp_unzip.'install.php')
+        && file_exists($temp_unzip.'uninstall.php')
+        && file_exists($temp_unzip.'info.php')) {
+        $upload_message .= sprintf($LANG['MOD_OPF']['TXT_LOOKS_LIKE_MODULE'],
+            '../modules/index.php'
+        );
+    }
+    @unlink($temp_dir.$temp_file);
+    // Cleanup temp
+    opf_io_rmdir($temp_unzip);
+    return;
+}
+$plugin_directory = opf_plugin_info_read($temp_unzip.$info_file);
+
+if (!$plugin_directory || !preg_match('/^[a-z0-9][a-z0-9_-]{0,79}$/i', (string) $plugin_directory)) {
+    $upload_message = sprintf($text_failed, $LANG['MOD_OPF']['TXT_NOT_A_FILTER']);
+    opf_io_rmdir($temp_unzip);
+    @unlink($temp_dir.$temp_file);
+    return;
+}
+
+// Plugin of the same name is already present in /plugins/ directory
+// Check version
+if(file_exists($install_dir.$plugin_directory)) {
+    $bUnlinkTemp = false;
+    
+    $old_version =  opf_plugin_info_read($install_dir.$plugin_directory.'/'.$info_file, 'plugin_version');
+    $new_version =  opf_plugin_info_read($temp_unzip.$info_file, 'plugin_version');
+    
+    if(version_compare($old_version, $new_version, '>')) {
+        $bUnlinkTemp = true;
+        $upload_message = sprintf($text_failed, $LANG['MOD_OPF']['TXT_NEWER_V_ALREADY_INSTALLED']);
+    }
+    if(version_compare($old_version, $new_version, '=')) {
+        $bUnlinkTemp = true;
+        $upload_message = sprintf($text_failed, $LANG['MOD_OPF']['TXT_SAME_V_ALREADY_INSTALLED']);
+    }
+    
+    if($bUnlinkTemp == true){
+        opf_io_rmdir($temp_unzip);
+        @unlink($temp_dir.$temp_file);
+        return;
+    }
+    
+}
+
+$plugin_dir = $install_dir.$plugin_directory;
+$backup_dir = $temp_dir.'opf_backup_'.$tempToken;
+$had_previous_version = is_dir($plugin_dir);
+
+// Replace an existing plugin atomically. The previous version remains available
+// until the new plugin has passed validation and its installer has succeeded.
+if($had_previous_version && !@rename($plugin_dir, $backup_dir)) {
+    $upload_message = sprintf($text_failed, $LANG['MOD_OPF']['TXT_DIR_WRITE_FAILED']);
+    opf_io_rmdir($temp_unzip);
+    @unlink($temp_dir.$temp_file);
+    return;
+}
+if(!@rename(rtrim($temp_unzip, '/'), $plugin_dir)) {
+    if($had_previous_version) {
+        @rename($backup_dir, $plugin_dir);
+    }
+    $upload_message = sprintf($text_failed, $LANG['MOD_OPF']['TXT_UNZIP_FAILED']);
+    opf_io_rmdir($temp_unzip);
+    @unlink($temp_dir.$temp_file);
+    return;
+}
+if(!opf_io_validate_tree($plugin_dir)) {
+    opf_io_rmdir($plugin_dir);
+    if($had_previous_version) {
+        @rename($backup_dir, $plugin_dir);
+    }
+    $upload_message = sprintf($text_failed, $LANG['MOD_OPF']['TXT_ARCHIVE_INVALID']);
+    @unlink($temp_dir.$temp_file);
+    return;
+}
+
+// delete archive
+@unlink($temp_dir.$temp_file);
+
+// chmod new files
+foreach(opf_io_filelist($plugin_dir) as $file)
+    opf_io_chmod($file);
+
+// run install-script
+try {
+    $install_result = TRUE;
+    if(file_exists($plugin_dir.'/'.$install_file)) {
+        $install_result = require($plugin_dir.'/'.$install_file);
+    }
+    if($install_result === FALSE) {
+        throw new RuntimeException('Plugin installation failed');
+    }
+} catch(Throwable $exception) {
+    opf_io_rmdir($plugin_dir);
+    if($had_previous_version) {
+        @rename($backup_dir, $plugin_dir);
+    }
+    $upload_message = sprintf($text_failed, $LANG['MOD_OPF']['TXT_PLUGIN_INSTALL_FAILED']);
+    return;
+}
+if($had_previous_version) {
+    opf_io_rmdir($backup_dir);
+}
+
+$upload_message = $LANG['MOD_OPF']['TXT_PLUGIN_UPLOAD_SUCCESS'];
+$upload_ok = TRUE;
+return;

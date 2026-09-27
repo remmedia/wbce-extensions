@@ -1,0 +1,3 @@
+<?php
+$module_directory='captcha_recaptcha';
+$module_uuid = '41b8690c-084e-427f-9b21-ddfa7312561b'; $module_name='CAPTCHA - Google reCAPTCHA'; $module_function='initialize'; $module_version='1.0.20'; $module_platform='1.7.0'; $module_author='Mathias Lange'; $module_license='GNU GPL2 or later'; $module_description='Bindet Google reCAPTCHA v2 oder v3 in die zentrale CAPTCHA-Verwaltung ein; bei der Nutzung werden Daten an Google übertragen.'; $module_icon='fa fa-google'; $module_dependencies='captcha_control>=3.1.33'; $module_requires_any='WBCE>=1.7.0|wbce_hook_bridge>=1.2.0'; $module_requires_php='8.2.0';
